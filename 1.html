@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpliftU - Admin Dashboard</title>
+    <style>
+        :root {
+            --primary-blue: #1E6091;
+            --secondary-color: #50E3C2;
+            --dark-navy: #0D1B2A;
+            --light-background: #f8f9fa;
+            --gray-text: #333333;
+            --light-gray: #abb1d1;
+            --hover-blue: #155077;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-background);
+            color: var(--gray-text);
+        }
+        
+        /* Main Layout & Navbar */
+        .top-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--dark-navy);
+            color: var(--white);
+            padding: 10px 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-navbar .logo h2 {
+            margin: 0;
+            color: var(--primary-blue);
+        }
+
+        .top-navbar .main-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .top-navbar .main-nav .nav-item a {
+            color: var(--light-gray);
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .top-navbar .main-nav .nav-item a:hover,
+        .top-navbar .main-nav .nav-item.active a {
+            background-color: var(--hover-blue);
+            color: var(--white);
+        }
+        
+        /* Profile Dropdown */
+        .profile-menu {
+            position: relative;
+        }
+
+        .profile-dropdown-btn {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .profile-dropdown-btn:hover {
+            color: var(--primary-blue);
+        }
+
+        .profile-dropdown-content {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: var(--white);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .profile-dropdown-content a {
+            color: var(--gray-text);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .profile-dropdown-content a:hover {
+            background-color: var(--light-background);
+        }
+        
+        .profile-dropdown-content a:last-child {
+            color: #e74c3c;
+            border-top: 1px solid #eee;
+        }
+        
+        .profile-dropdown-content a:last-child:hover {
+            background-color: #fcebeb;
+        }
+
+        /* Mobile Navigation Toggle */
+        .mobile-nav-toggle {
+            display: none;
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+            padding: 0.5em;
+        }
+
+        .mobile-nav-toggle .icon-bar {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background-color: var(--white);
+            border-radius: 1px;
+            margin: 4px 0;
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Main Content Area */
+        .main-content-container {
+            padding: 30px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            color: var(--dark-navy);
+            margin: 0;
+        }
+
+        .dashboard-header p {
+            color: var(--gray-text);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+        
+        /* Cards */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary-blue);
+        }
+        
+        /* Buttons and Forms */
+        .btn-cta {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-cta:hover {
+            background-color: var(--hover-blue);
+        }
+
+        .btn-action {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-right: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-action.approve { background-color: #2ecc71; color: var(--white); }
+        .btn-action.reject { background-color: #e74c3c; color: var(--white); }
+        .btn-action.edit { background-color: #3498db; color: var(--white); }
+        .btn-action.suspend { background-color: #f39c12; color: var(--white); }
+        .btn-action.delete { background-color: #e74c3c; color: var(--white); }
+        .btn-action.view { background-color: #9b59b6; color: var(--white); }
+        .btn-action:hover { opacity: 0.8; }
+        
+        .search-bar {
+            margin-bottom: 20px;
+            padding: 10px;
+            width: calc(100% - 22px); /* Account for padding and border */
+            border-radius: 5px;
+            border: 1px solid var(--light-gray);
+        }
+        
+        /* Responsive Tables */
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            background-color: var(--white);
+            white-space: nowrap; /* Prevents text from wrapping */
+        }
+
+        table th {
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+        
+        table tr:nth-child(even) td {
+            background-color: var(--light-background);
+        }
+
+        /* Keyword Highlighting */
+        .highlight {
+            background-color: #fcebeb;
+            color: #d9534f;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        /* Charts */
+        .chart-container {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .pie-chart-wrapper {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #ff6384 0% 25%, 
+                #36a2eb 25% 45%, 
+                #ffcd56 45% 60%, 
+                #4bc0c0 60% 70%, 
+                #9966ff 70% 100%
+            );
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        .pie-chart-legend {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .pie-chart-legend li {
+            display: flex;
+            align-items: center;
+            margin: 5px 15px;
+            font-size: 0.9em;
+        }
+        
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .top-navbar .main-nav {
+                display: none;
+                position: absolute;
+                top: 62px; /* Navbar height */
+                left: 0;
+                right: 0;
+                background-color: var(--dark-navy);
+                width: 100%;
+                flex-direction: column;
+                padding: 10px 0;
+                box-shadow: 0 4px 5px rgba(0,0,0,0.2);
+            }
+
+            .top-navbar .main-nav.nav-open {
+                display: flex;
+            }
+
+            .top-navbar .main-nav ul {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .top-navbar .main-nav .nav-item a {
+                padding: 15px;
+                text-align: center;
+                border-bottom: 1px solid var(--hover-blue);
+            }
+
+            .top-navbar .main-nav .nav-item:last-child a {
+                border-bottom: none;
+            }
+
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .top-navbar {
+                padding: 10px 20px;
+            }
+
+            .main-content-container {
+                padding: 20px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header class="top-navbar">
+        <div class="logo">
+            <h2>UpliftU</h2>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li class="nav-item active" data-target="dashboard">
+                    <a href="#">Dashboard</a>
+                </li>
+                <li class="nav-item" data-target="user-management">
+                    <a href="#">User Management</a>
+                </li>
+                <li class="nav-item" data-target="forum-management">
+                    <a href="#">Forum Management</a>
+                </li>
+                <li class="nav-item" data-target="resource-control">
+                    <a href="#">Resource Management</a>
+                </li>
+                <li class="nav-item" data-target="analytics">
+                    <a href="#">Analytics & Reports</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="profile-menu">
+            <button class="profile-dropdown-btn">Admin Profile ▼</button>
+            <div class="profile-dropdown-content">
+                <a href="#" id="edit-profile-link">Edit Profile</a>
+                <a href="#" id="logout-link">Logout</a>
+            </div>
+        </div>
+        <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false">
+            <span class="sr-only">Menu</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    </header>
+
+    <div class="main-content-container">
+        <div id="dashboard" class="content-section active">
+            <header class="dashboard-header">
+                <h1>Welcome, Admin!</h1>
+                <p>Manage the UpliftU platform.</p>
+            </header>
+            <h2>System Overview</h2>
+            <div class="card-container">
+                <div class="card">
+                    <h3>Total Users</h3>
+                    <p><strong>1,250</strong></p>
+                </div>
+                <div class="card">
+                    <h3>Active Sessions</h3>
+                    <p><strong>8</strong></p>
+                </div>
+                <div class="card">
+                    <h3>Pending Approvals</h3>
+                    <p><strong>2</strong> user registrations</p>
+                    <p><strong>4</strong> resources</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="user-management" class="content-section">
+            <header class="dashboard-header">
+                <h1>User Management</h1>
+            </header>
+            <input type="text" class="search-bar" placeholder="Search users by name or ID...">
+            <p><strong>Pending Registrations</strong></p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>UID101</td>
+                            <td>Alex Johnson</td>
+                            <td>Counselor</td>
+                            <td>
+                                <button class="btn-action approve">Approve</button>
+                                <button class="btn-action reject">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><strong>All Users</strong></p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SID123</td>
+                            <td>Jane Doe</td>
+                            <td>Student</td>
+                            <td>Active</td>
+                            <td>
+                                <button class="btn-action edit">Edit</button>
+                                <button class="btn-action suspend">Suspend</button>
+                                <button class="btn-action delete">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>CID456</td>
+                            <td>Dr. Smith</td>
+                            <td>Counselor</td>
+                            <td>Active</td>
+                            <td>
+                                <button class="btn-action edit">Edit</button>
+                                <button class="btn-action suspend">Suspend</button>
+                                <button class="btn-action delete">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="forum-management" class="content-section">
+            <header class="dashboard-header">
+                <h1>Peer Forum Management</h1>
+            </header>
+            <p><strong>Flagged Posts (Automated Keyword Detection)</strong></p>
+             <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Post ID</th>
+                            <th>Content</th>
+                            <th>User ID</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>F001</td>
+                            <td class="forum-post-flagged">I'm struggling and thinking of harming myself. What can I do to get help?</td>
+                            <td>SID124</td>
+                            <td>
+                                <button class="btn-action delete">Delete Post</button>
+                                <button class="btn-action suspend">Suspend User</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <p><strong>All Forum Posts</strong></p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Post ID</th>
+                            <th>Content</th>
+                            <th>User ID</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>F002</td>
+                            <td class="forum-post">What are some good ways to manage exam stress?</td>
+                            <td>SID123</td>
+                            <td>
+                                <button class="btn-action delete">Delete Post</button>
+                                <button class="btn-action suspend">Suspend User</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="resource-control" class="content-section">
+            <header class="dashboard-header">
+                <h1>Resource Library Management</h1>
+            </header>
+            <p><strong>Pending Resources for Approval</strong></p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Uploader</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>"Coping with Stress"</td>
+                            <td>Dr. Johnson</td>
+                            <td>
+                                <button class="btn-action approve">Approve</button>
+                                <button class="btn-action reject">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>"Relaxation Audio"</td>
+                            <td>Volunteer Anna</td>
+                            <td>
+                                <button class="btn-action approve">Approve</button>
+                                <button class="btn-action reject">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><strong>Add/Remove Resources</strong></p>
+            <form>
+                <input type="text" placeholder="Title" class="search-bar" style="width: calc(100% - 22px); margin-bottom: 10px;">
+                <input type="text" placeholder="Category" class="search-bar" style="width: calc(100% - 22px); margin-bottom: 10px;">
+                <input type="file" style="margin-bottom: 10px;">
+                <button class="btn-cta">Add Resource</button>
+            </form>
+        </div>
+        
+        <div id="analytics" class="content-section">
+            <header class="dashboard-header">
+                <h1>Analytics & Reports</h1>
+            </header>
+            <div class="chart-container">
+                <h3>Common Mental Health Concerns</h3>
+                <div class="pie-chart-wrapper"></div>
+                <ul class="pie-chart-legend">
+                    <li><span class="legend-color" style="background-color: #ff6384;"></span>25% Anxiety</li>
+                    <li><span class="legend-color" style="background-color: #36a2eb;"></span>20% Stress</li>
+                    <li><span class="legend-color" style="background-color: #ffcd56;"></span>15% Depression</li>
+                    <li><span class="legend-color" style="background-color: #4bc0c0;"></span>10% Loneliness</li>
+                    <li><span class="legend-color" style="background-color: #9966ff;"></span>30% Academic Pressure</li>
+                </ul>
+            </div>
+
+            <p><strong>Counselor Session Reports</strong></p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Report ID</th>
+                            <th>Counselor Name</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>R001</td>
+                            <td>Dr. Smith</td>
+                            <td>Sept 20, 2025</td>
+                            <td>
+                                <button class="btn-action view">View Report</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="profile-settings" class="content-section">
+            <header class="dashboard-header">
+                <h1>Admin Profile Settings</h1>
+            </header>
+            <div class="card" style="max-width: 600px; margin: auto;">
+                <h3>Update Profile</h3>
+                <form class="profile-form">
+                    <label for="admin-name" style="margin-top: 15px; font-weight: bold; display: block;">Name:</label>
+                    <input type="text" id="admin-name" value="Admin User" required class="search-bar">
+
+                    <label for="admin-email" style="margin-top: 15px; font-weight: bold; display: block;">Email:</label>
+                    <input type="email" id="admin-email" value="admin@upliftu.com" required class="search-bar">
+
+                    <label for="new-pass" style="margin-top: 15px; font-weight: bold; display: block;">Change Password:</label>
+                    <input type="password" id="new-pass" placeholder="Enter new password" class="search-bar">
+                    
+                    <label for="confirm-pass" style="margin-top: 15px; font-weight: bold; display: block;">Confirm Password:</label>
+                    <input type="password" id="confirm-pass" placeholder="Confirm new password" class="search-bar">
+                    
+                    <button type="submit" class="btn-cta" style="margin-top: 20px;">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navItems = document.querySelectorAll('.main-nav .nav-item');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            const profileBtn = document.querySelector('.profile-dropdown-btn');
+            const profileDropdown = document.querySelector('.profile-dropdown-content');
+            const logoutLink = document.getElementById('logout-link');
+            const editProfileLink = document.getElementById('edit-profile-link');
+
+            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+            const mainNav = document.querySelector('.main-nav');
+            
+            // Toggle profile dropdown
+            profileBtn.addEventListener('click', () => {
+                profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Close profile dropdown if clicked outside
+            window.addEventListener('click', (e) => {
+                if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                    profileDropdown.style.display = 'none';
+                }
+            });
+
+            // Toggle mobile navigation
+            if (mobileNavToggle) {
+                mobileNavToggle.addEventListener('click', () => {
+                    mainNav.classList.toggle('nav-open');
+                    const isExpanded = mainNav.classList.contains('nav-open');
+                    mobileNavToggle.setAttribute('aria-expanded', isExpanded);
+                });
+            }
+
+            // Navigate to Edit Profile section
+            if (editProfileLink) {
+                editProfileLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    switchSection('profile-settings');
+                });
+            }
+            
+            const switchSection = (targetId) => {
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.target === targetId) {
+                        item.classList.add('active');
+                    }
+                });
+                profileDropdown.style.display = 'none'; // Close dropdown after selection
+            };
+
+            const highlightKeywords = (text, keywords) => {
+                let highlightedText = text;
+                const regex = new RegExp(keywords.join('|'), 'gi');
+                highlightedText = highlightedText.replace(regex, (match) => {
+                    return `<span class="highlight">${match}</span>`;
+                });
+                return highlightedText;
+            };
+
+            const flaggedKeywords = ['harm', 'suicide', 'hurt', 'kill', 'abuse', 'depressed', 'alone'];
+            const flaggedPost = document.querySelector('.forum-post-flagged');
+            if (flaggedPost) {
+                flaggedPost.innerHTML = highlightKeywords(flaggedPost.textContent, flaggedKeywords);
+            }
+            
+            // Main navigation logic
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = e.currentTarget.dataset.target;
+                    switchSection(targetId);
+                    // Close mobile nav if open
+                    if (mainNav.classList.contains('nav-open')) {
+                        mainNav.classList.remove('nav-open');
+                        mobileNavToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+
+            const actionHandlers = document.querySelectorAll('.btn-action');
+            actionHandlers.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const action = e.target.textContent;
+                    if (action === 'View Report') {
+                        alert('Viewing report details.');
+                    } else {
+                        alert(`Action: ${action} triggered!`);
+                    }
+                });
+            });
+            
+            logoutLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Logging out...');
+                window.location.href = '#'; // Or your actual logout page
+            });
+
+            const profileForm = document.querySelector('#profile-settings .profile-form');
+            if (profileForm) {
+                profileForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const newPass = document.getElementById('new-pass').value;
+                    const confirmPass = document.getElementById('confirm-pass').value;
+
+                    if (newPass && newPass !== confirmPass) {
+                        alert('Error: Passwords do not match.');
+                        return;
+                    }
+                    
+                    alert('Profile updated successfully!');
+                });
+            }
+
+            // Initialize with the dashboard section
+            switchSection('dashboard');
+        });
+    </script>
+</body>
+</html>
