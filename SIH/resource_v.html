@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Resource Management - UpliftU</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1E6091;
+            --sidebar-bg: #0D1B2A;
+            --content-bg: #f9f9fb;
+            --text-dark: #0D1B2A;
+            --white: #fff;
+            --hover-blue: #155077;
+            --soft-blue: #D9EFFF;
+        }
+
+        /* Reset & body */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: var(--content-bg);
+            color: var(--text-dark);
+        }
+
+        /* TOPBAR */
+        .topbar {
+            background: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topbar-left h1 {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .logo {
+            width: 60px;
+            height: auto;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--hover-blue);
+        }
+
+        /* Layout */
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 56px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background: var(--sidebar-bg);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 15px;
+        }
+
+        .nav {
+            list-style: none;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-left: 10px;
+        }
+
+        .nav li {
+            margin: 10px 0;
+        }
+
+        .nav a {
+            display: block;
+            padding: 10px 14px;
+            text-decoration: none;
+            color: var(--white);
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: var(--primary);
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .resources-container {
+            max-width: 900px;
+            margin: auto;
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .resources-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .resource-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .resource-form select,
+        .resource-form input,
+        .resource-form textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .resource-form button {
+            padding: 10px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .resource-form button:hover {
+            background: var(--hover-blue);
+        }
+
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .resource-card {
+            background: var(--soft-blue);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .resource-card h3 {
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+
+        .resource-card p {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .resource-card a {
+            color: var(--text-dark);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .resource-card a:hover {
+            text-decoration: underline;
+        }
+
+        .card-actions {
+            margin-top: 10px;
+        }
+
+        .card-actions button {
+            margin-right: 10px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .edit-btn:hover {
+            background: #e0a800;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--sidebar-bg);
+            color: var(--white);
+            padding: 40px 20px;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px;
+            max-width: 1200px;
+            margin: auto;
+            align-items: flex-start;
+        }
+
+        .footer-column {
+            flex: 1 1 220px;
+            /* ensures minimum width for desktop alignment */
+        }
+
+        .footer-column h4 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer-column p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #ccc;
+        }
+
+        .footer-copy {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #ccc;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 12px;
+        }
+
+        /* Responsive */
+        @media(max-width:768px) {
+            .footer-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .footer-column {
+                flex: 1 1 100%;
+            }
+
+            .footer-copy {
+                margin-top: 20px;
+            }
+        }
+
+
+        /* Responsive */
+        @media(max-width:768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 10px 0;
+            }
+
+            .nav {
+                flex-direction: row;
+                gap: 10px;
+                padding-left: 0;
+            }
+
+            .nav li {
+                margin: 0;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <img src="logo.jpg" alt="UpliftU Logo" class="logo">
+            <h1>Volunteer Dashboard</h1>
+        </div>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul class="nav">
+                <li><a href="volunteer.html">🏠 Home</a></li>
+                <li><a href="profile_v.html">👤 Profile</a></li>
+                <li><a href="peer_v.html">🤝 Peer Support</a></li>
+                <li><a href="resource_v.html" class="active">📚 Resources</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="resources-container">
+                <h2>Manage Resources</h2>
+
+                <!-- Add Resource Form -->
+                <form class="resource-form" onsubmit="addResource(event)">
+                    <select id="category" required>
+                        <option value="">Select Category</option>
+                        <option value="Stress">Stress</option>
+                        <option value="Depression">Depression</option>
+                        <option value="Sleeping Disorder">Sleeping Disorder</option>
+                        <option value="Anxiety">Anxiety</option>
+                    </select>
+                    <select id="type" required>
+                        <option value="">Select Type</option>
+                        <option value="Video">Video</option>
+                        <option value="Audio">Audio</option>
+                        <option value="Book">Book</option>
+                        <option value="Report">Report</option>
+                    </select>
+                    <input type="text" id="title" placeholder="Resource Title" required>
+                    <textarea id="description" rows="3" placeholder="Resource Description" required></textarea>
+                    <div>
+                        <label><input type="radio" name="resourceInput" value="url" checked> Use URL</label>
+                        <label><input type="radio" name="resourceInput" value="file"> Upload File</label>
+                    </div>
+                    <input type="url" id="link" placeholder="Resource Link (https://...)" required>
+                    <input type="file" id="file" style="display:none">
+                    <button type="submit">Add Resource</button>
+                </form>
+
+                <!-- Resource List -->
+                <div class="resource-list" id="resourceList"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>About UpliftU</h4>
+                <p>Supporting student mental health and volunteer collaboration through resources and peer guidance.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="about_v.html">About Us</a></li>
+                    <li><a href="contact_v.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Policies</h4>
+                <ul class="footer-links">
+                    <li><a href="privacy_v.html">Privacy Policy</a></li>
+                    <li><a href="tos_v.html">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Community</h4>
+                <ul class="footer-links">
+                    <li><a href="forum_v.html">Forum</a></li>
+                    <li><a href="events_v.html">Events</a></li>
+                </ul>
+            </div>
+        </div>
+        <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const linkInput = document.getElementById('link');
+        const fileInput = document.getElementById('file');
+        const resourceRadios = document.getElementsByName('resourceInput');
+
+        resourceRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.value === 'url') { linkInput.style.display = 'block'; fileInput.style.display = 'none'; linkInput.required = true; fileInput.required = false; }
+                else { linkInput.style.display = 'none'; fileInput.style.display = 'block'; linkInput.required = false; fileInput.required = true; }
+            });
+        });
+
+        function addResource(e) {
+            e.preventDefault();
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const type = document.getElementById('type').value;
+            const category = document.getElementById('category').value;
+            let link = '', fileName = '';
+            if (document.querySelector('input[name="resourceInput"]:checked').value === 'url') { link = document.getElementById('link').value; }
+            else {
+                const file = document.getElementById('file').files[0];
+                if (file) { fileName = file.name; const reader = new FileReader(); reader.onload = function () { saveResource({ title, description, type, category, link: '', fileName, fileData: reader.result, views: 0 }); }; reader.readAsDataURL(file); return; }
+            }
+            saveResource({ title, description, type, category, link, fileName, fileData: '', views: 0 });
+        }
+
+        function saveResource(resource) {
+            let resources = JSON.parse(localStorage.getItem('volResources') || '[]');
+            resources.push(resource);
+            localStorage.setItem('volResources', JSON.stringify(resources));
+            renderResources();
+            document.querySelector('.resource-form').reset();
+            linkInput.style.display = 'block';
+            fileInput.style.display = 'none';
+        }
+
+        function renderResources() {
+            const list = document.getElementById('resourceList');
+            let resources = JSON.parse(localStorage.getItem('volResources') || '[]');
+            list.innerHTML = "";
+            resources.forEach((res, index) => {
+                let resourceHTML = res.link ? `<a href="${res.link}" target="_blank" onclick="incrementView(${index})">Visit Resource</a>` : `<a href="${res.fileData}" download="${res.fileName}">${res.fileName}</a>`;
+                list.innerHTML += `
+      <div class="resource-card">
+        <h3>${res.title}</h3>
+        <p>${res.description}</p>
+        <p><span>Type:</span> ${res.type} | <span>Category:</span> ${res.category} | <span>Views:</span> ${res.views}</p>
+        ${resourceHTML}
+        <div class="card-actions">
+          <button class="edit-btn" onclick="editResource(${index})">Edit</button>
+          <button class="delete-btn" onclick="deleteResource(${index})">Delete</button>
+        </div>
+      </div>
+    `;
+            });
+        }
+
+        function incrementView(index) { let resources = JSON.parse(localStorage.getItem('volResources') || '[]'); resources[index].views++; localStorage.setItem('volResources', JSON.stringify(resources)); renderResources(); }
+        function editResource(index) { let resources = JSON.parse(localStorage.getItem('volResources') || '[]'); const res = resources[index]; document.getElementById('title').value = res.title; document.getElementById('description').value = res.description; document.getElementById('type').value = res.type; document.getElementById('category').value = res.category; if (res.link) { document.querySelector('input[value="url"]').checked = true; linkInput.style.display = 'block'; fileInput.style.display = 'none'; linkInput.value = res.link; } else { document.querySelector('input[value="file"]').checked = true; linkInput.style.display = 'none'; fileInput.style.display = 'block'; } resources.splice(index, 1); localStorage.setItem('volResources', JSON.stringify(resources)); renderResources(); }
+        function deleteResource(index) { let resources = JSON.parse(localStorage.getItem('volResources') || '[]'); resources.splice(index, 1); localStorage.setItem('volResources', JSON.stringify(resources)); renderResources(); }
+
+        
+
+        function logout() {
+            alert('You have been logged out!');
+            window.location.href = 'index.html';
+        }
+        renderResources();
+    </script>
+
+</body>
+
+</html>

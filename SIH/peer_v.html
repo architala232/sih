@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peer Support Forum - Volunteer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1E6091;
+            --sidebar-bg: #0D1B2A;
+            --content-bg: #f9f9fb;
+            --text-dark: #0D1B2A;
+            --white: #fff;
+            --hover-blue: #155077;
+            --soft-blue: #D9EFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: var(--content-bg);
+            color: var(--text-dark);
+        }
+
+        /* TOPBAR */
+        .topbar {
+            background: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topbar-left h1 {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .logo {
+            width: 60px;
+            height: auto;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--hover-blue);
+        }
+
+        /* Layout */
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 56px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background: var(--sidebar-bg);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 15px;
+        }
+
+        .nav {
+            list-style: none;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-left: 10px;
+        }
+
+        .nav li {
+            margin: 10px 0;
+        }
+
+        .nav a {
+            display: block;
+            padding: 10px 14px;
+            text-decoration: none;
+            color: var(--white);
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: var(--primary);
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .forum-container {
+            max-width: 900px;
+            margin: auto;
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .forum-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .question,
+        .answer {
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .question {
+            background: #f5f5f5;
+            border-left: 5px solid var(--primary);
+        }
+
+        .answer {
+            background: var(--soft-blue);
+            border-left: 3px solid var(--primary);
+            margin-left: 20px;
+        }
+
+        .question h4,
+        .answer strong {
+            color: var(--primary);
+        }
+
+        .question p,
+        .answer p {
+            margin-top: 6px;
+        }
+
+        .answer-form textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            min-height: 60px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .answer-btn,
+        .delete-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 6px;
+            margin-top: 4px;
+        }
+
+        .answer-btn {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .answer-btn:hover {
+            background: var(--hover-blue);
+        }
+
+        .delete-btn {
+            background: #150446;
+            color: #fff;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--sidebar-bg);
+            color: var(--white);
+            padding: 40px 20px;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .footer-column {
+            flex: 1 1 220px;
+        }
+
+        .footer-column h4 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer-column p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #ccc;
+        }
+
+        .footer-copy {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #ccc;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 12px;
+        }
+
+        @media(max-width:768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 10px 0;
+            }
+
+            .nav {
+                flex-direction: row;
+                gap: 10px;
+                padding-left: 0;
+            }
+
+            .nav li {
+                margin: 0;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+
+            .answer {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <img src="logo.jpg" alt="UpliftU Logo" class="logo">
+            <h1>Volunteer Dashboard</h1>
+        </div>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul class="nav">
+                <li><a href="volunteer.html">🏠 Home</a></li>
+                <li><a href="profile_v.html">👤 Profile</a></li>
+                <li><a href="peer_v.html" class="active">🤝 Peer Support</a></li>
+                <li><a href="resource_v.html">📚 Resources</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="forum-container">
+                <h2>Peer Support Forum</h2>
+                <div id="questionsList"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>About UpliftU</h4>
+                <p>Supporting student mental health and volunteer collaboration through resources and peer guidance.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="about_v.html">About Us</a></li>
+                    <li><a href="contact_v.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Policies</h4>
+                <ul class="footer-links">
+                    <li><a href="privacy_v.html">Privacy Policy</a></li>
+                    <li><a href="tos_v.html">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Community</h4>
+                <ul class="footer-links">
+                    <li><a href="forum_v.html">Forum</a></li>
+                    <li><a href="event_v.html">Events</a></li>
+                </ul>
+            </div>
+        </div>
+        <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const volunteerUsername = "volunteer_001";
+        const questions = [
+            { user: "student_1023", text: "How can I manage stress during exams?", answers: [{ user: "student_2045", text: "Try a study plan and short breaks." }, { user: "student_3099", text: "Pomodoro technique helps." }] },
+            { user: "student_8765", text: "I have trouble sleeping, any advice?", answers: [] }
+        ];
+
+        function renderQuestions() {
+            const list = document.getElementById("questionsList");
+            list.innerHTML = "";
+            questions.forEach((q, qIndex) => {
+                const qDiv = document.createElement("div");
+                qDiv.classList.add("question");
+                qDiv.innerHTML = `
+      <h4>@${q.user}</h4>
+      <p>${q.text}</p>
+      <button class="delete-btn" onclick="deleteQuestion(${qIndex})">Delete Question</button>
+    `;
+                q.answers.forEach((a, aIndex) => {
+                    const ansDiv = document.createElement("div");
+                    ansDiv.classList.add("answer");
+                    ansDiv.innerHTML = `<strong>@${a.user}:</strong> ${a.text} <button class="delete-btn" onclick="deleteAnswer(${qIndex}, ${aIndex})">Delete</button>`;
+                    qDiv.appendChild(ansDiv);
+                });
+                const formDiv = document.createElement("div");
+                formDiv.classList.add("answer-form");
+                formDiv.innerHTML = `<textarea id="answer_${qIndex}" placeholder="Write your answer..."></textarea><button class="answer-btn" onclick="postAnswer(${qIndex})">Post Answer</button>`;
+                qDiv.appendChild(formDiv);
+                list.appendChild(qDiv);
+            });
+        }
+
+        function deleteQuestion(qIndex) {
+            if (confirm("Are you sure you want to delete this question?")) {
+                questions.splice(qIndex, 1);
+                renderQuestions();
+            }
+        }
+
+        function deleteAnswer(qIndex, aIndex) {
+            if (confirm("Are you sure you want to delete this answer?")) {
+                questions[qIndex].answers.splice(aIndex, 1);
+                renderQuestions();
+            }
+        }
+
+        function postAnswer(qIndex) {
+            const text = document.getElementById(`answer_${qIndex}`).value.trim();
+            if (!text) { alert("Please write an answer before posting."); return; }
+            questions[qIndex].answers.push({ user: volunteerUsername, text });
+            renderQuestions();
+        }
+
+        function logout() {
+            alert('You have been logged out!');
+            window.location.href = 'index.html';
+        }
+
+        renderQuestions();
+    </script>
+
+</body>
+</html>

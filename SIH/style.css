@@ -1,0 +1,337 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Body */
+body {
+  background: linear-gradient(135deg, #E6F2FF, #B3D8FF);
+  color: #0D1B2A;
+  line-height: 1.6;
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  justify-content: space-between; /* logo left, hamburger right */
+  align-items: center;
+  padding: 10px 15px 0px 15px;
+  background: #ffffff;
+  border-bottom: 1px solid #c0d4e6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+nav .logo img {
+  height: 75px;
+  width: auto;
+}
+
+nav .nav-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+nav .nav-links li a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #0D1B2A;
+  transition: color 0.3s ease;
+}
+
+nav .nav-links li a:hover {
+  color: #02080c;
+}
+
+/* Login Button */
+nav .signin-btn {
+  padding: 5px 10px;
+  background: #1E6091;
+  color: #e3dbdb;
+  border-radius: 5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+nav .signin-btn:hover {
+  background: #155077;
+  transform: translateY(-2px);
+}
+
+/* Dropdown Menu */
+nav .dropdown {
+  position: relative;
+}
+
+nav .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  list-style: none;
+  padding: 10px 0;
+  display: none;
+  min-width: 320px;
+  z-index: 1000;
+}
+
+nav .dropdown:hover .dropdown-menu,
+nav .dropdown.active .dropdown-menu {
+  display: block;
+}
+
+/* FAQ Items */
+.faq-item {
+  border-bottom: 1px solid #eee;
+}
+
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #0D1B2A;
+  transition: color 0.3s ease;
+}
+
+.faq-question:hover {
+  color: #1E6091;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow-y: auto;
+  padding: 0 16px;
+  font-size: 0.95rem;
+  color: #444;
+  background: #f8f6f3;
+  line-height: 1.5;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 250px;
+  padding: 10px 16px;
+}
+
+/* Header Section */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 90px 70px;
+  max-width: 1350px;
+  margin: auto;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+.header-content {
+  flex: 1;
+  min-width: 340px;
+}
+
+.header-content h1 {
+  font-size: 3.4rem;
+  font-weight: 800;
+  color: #0D1B2A;
+  margin-bottom: 25px;
+}
+
+.header-content p {
+  font-size: 1.2rem;
+  color: #0D1B2A;
+  line-height: 1.9;
+  text-align: justify;
+}
+
+/* Header Images - 2x2 Grid */
+.header-images {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  justify-items: center;
+}
+
+.header-images img {
+  width: 100%;
+  max-width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Quote Section */
+.quote-section {
+  text-align: center;
+  margin: 70px auto;
+  max-width: 900px;
+  padding: 25px;
+}
+
+.quote-section .quote {
+  font-size: 1.5rem;
+  font-style: italic;
+  color: #1E3A5F;
+  line-height: 1.8;
+}
+
+/* Points Section */
+.points-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 35px;
+  max-width: 1150px;
+  margin: 70px auto;
+  padding: 0 25px;
+}
+
+.points-section .point {
+  background: #D9EFFF;
+  padding: 30px 28px;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.points-section .point h3 {
+  font-size: 1.5rem;
+  margin-bottom: 14px;
+  color: #1E6091;
+}
+
+.points-section .point p {
+  font-size: 1.05rem;
+  color: #0D1B2A;
+}
+
+.points-section .point:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.12);
+}
+
+/* Footer */
+footer {
+  background: #0D1B2A;
+  color: #fff;
+  padding: 40px 50px;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-left {
+  flex: 1;
+  min-width: 250px;
+}
+
+.footer-left h4 {
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.footer-left p {
+  font-size: 0.95rem;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.footer-right {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  min-width: 250px;
+}
+
+.footer-column {
+  margin-bottom: 20px;
+}
+
+.footer-column h4 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 8px;
+}
+
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #1E6091;
+}
+
+.footer-copy {
+  text-align: center;
+  margin-top: 25px;
+  color: #abb1d1;
+  font-size: 0.95rem;
+}
+
+/* Hamburger Menu */
+.menu-toggle {
+  display: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media screen and (max-width:950px) {
+  .main-header { flex-direction: column; text-align: center; }
+  .header-images { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+  .header-images img { width: 100%; max-width: 180px; height: 180px; }
+}
+
+@media screen and (max-width:600px) {
+  .main-header { padding: 50px 20px; }
+  .header-images { grid-template-columns: 1fr; gap: 15px; }
+  .header-images img { width: 100%; max-width: 250px; height: 250px; }
+
+  nav { flex-wrap: wrap; }
+  nav .nav-links { display: none; flex-direction: column; gap: 12px; width: 100%; }
+  nav .nav-links.active { display: flex; }
+
+  .menu-toggle { display: block; }
+
+  nav .dropdown-menu { min-width: 100%; }
+
+  /* Footer stacked vertically */
+  .footer-container { flex-direction: column; text-align: left; }
+  .footer-right { flex-direction: column; align-items: flex-start; gap: 20px; }
+}

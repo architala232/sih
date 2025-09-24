@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volunteer Dashboard - UpliftU</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-blue: #1E6091;
+  --hover-blue: #155077;
+  --dark-navy: #0D1B2A;
+  --white: #ffffff;
+  --light-bg: linear-gradient(135deg, #E6F2FF, #B3D8FF);
+  --gray-text: #0D1B2A;
+  --progress-bg: #d1e3f5;
+  --light-gray: #abb1d1;
+}
+
+/* Reset + Global */
+* {margin:0; padding:0; box-sizing:border-box; font-family:'Montserrat',sans-serif;}
+body {background: var(--light-bg); color: var(--gray-text); display:flex; flex-direction:column; min-height:100vh; line-height:1.7;}
+
+/* Navbar */
+.navbar {
+  background: var(--white);
+  padding: 12px 25px;
+  border-bottom:1px solid #c0d4e6;
+  display:flex; justify-content:space-between; align-items:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  position:sticky; top:0; z-index:1000;
+}
+.navbar .logo-container {
+  display:flex; align-items:center; gap:15px;
+}
+.navbar .logo-container img {height:50px;}
+.navbar .logo-container h2 {color:var(--primary-blue); font-size:20px; margin:0;}
+.navbar button {
+  background:var(--primary-blue); color:#fff;
+  border:none; padding:8px 18px;
+  border-radius:8px; font-weight:600;
+  cursor:pointer; transition:0.3s;
+}
+.navbar button:hover {background:var(--hover-blue);}
+
+/* Dashboard Layout */
+.dashboard-container {display:flex; flex:1; min-height: calc(100vh - 80px);}
+.sidebar {
+  width:230px; background:var(--dark-navy); color:#fff;
+  padding:20px; flex-shrink:0;
+}
+.sidebar h3 {margin-bottom:20px; font-size:1.3rem;}
+.sidebar ul {list-style:none; display:flex; flex-direction:column;}
+.sidebar ul li {margin:15px 0;}
+.sidebar ul li a {
+  text-decoration:none; color:#fff;
+  display:block; padding:10px; border-radius:6px;
+  font-weight:500; font-size:15px;
+  transition:0.3s;
+}
+.sidebar ul li a:hover, .sidebar ul li a.active {background:var(--hover-blue);}
+
+/* Main Content */
+.main-content {
+  flex:1; padding:25px; overflow:auto;
+  display:flex; flex-direction:column; align-items:center;
+}
+
+/* Welcome Screen */
+#welcome-screen {
+  background: var(--white);
+  padding:40px 30px; border-radius:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.1);
+  text-align:center; max-width:800px;
+}
+#welcome-screen h2 {color:var(--primary-blue); margin-bottom:20px;}
+#welcome-screen p {font-size:18px; margin-bottom:25px;}
+#welcome-screen button {
+  padding:14px 25px; background:var(--primary-blue); color:#fff;
+  border:none; border-radius:8px; font-weight:600;
+  cursor:pointer; transition:0.3s;
+}
+#welcome-screen button:hover {background:var(--hover-blue);}
+
+/* Progress */
+.progress-container {
+  display:none; background:var(--progress-bg);
+  height:25px; border-radius:12px;
+  margin-bottom:20px; width:100%; max-width:900px;
+}
+.progress-bar {
+  height:100%; width:0%; background:var(--primary-blue);
+  border-radius:12px; transition:width 0.5s ease;
+}
+
+/* Training */
+.training-container {display:none; max-width:900px; width:100%;}
+.step-content {
+  background: var(--white);
+  padding:30px; border-radius:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.1);
+  margin-bottom:20px; display:none;
+}
+.step-content.active {display:block;}
+.step-content h3 {color:var(--primary-blue); margin-bottom:15px;}
+.step-content p {margin-bottom:15px; text-align:justify;}
+.step-content ul {margin-left:20px; margin-bottom:15px;}
+.step-content ul li {margin-bottom:10px;}
+
+/* Buttons */
+.complete-btn {
+  padding:12px 20px; background:var(--primary-blue); color:#fff;
+  border:none; border-radius:8px; font-weight:600;
+  cursor:pointer; transition:0.3s;
+}
+.complete-btn:hover {background:var(--hover-blue);}
+
+/* Appreciation */
+#appreciation {
+  display:none; text-align:center;
+  font-size:18px; font-weight:600;
+  margin-bottom:20px; color:var(--primary-blue);
+}
+
+/* Footer */
+footer {
+  background: var(--dark-navy); color:#fff;
+  padding:40px 20px 20px; flex-shrink:0;
+}
+.footer-container {display:flex; flex-wrap:wrap; justify-content:space-between; max-width:1200px; margin:auto; gap:30px;}
+.footer-left {flex:1 1 300px;}
+.footer-left h4 {margin-bottom:10px; color:var(--primary-blue);}
+.footer-left p {font-size:14px; color:#d1d5db; line-height:1.6;}
+.footer-right {display:flex; flex:2; gap:40px; flex-wrap:wrap;}
+.footer-column {display:flex; flex-direction:column;}
+.footer-column h4 {margin-bottom:10px; color:var(--primary-blue);}
+.footer-links {list-style:none; display:flex; flex-direction:column;}
+.footer-links li {margin-bottom:8px;}
+.footer-links a {color:#fff; text-decoration:none; font-size:14px;}
+.footer-links a:hover {color:var(--light-gray); text-decoration:underline;}
+.footer-copy {text-align:center; font-size:13px; color:var(--light-gray); margin-top:20px; border-top:1px solid #2d3d55; padding-top:10px;}
+
+/* Confetti */
+#confetti {position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;}
+
+/* Responsive */
+@media (max-width:768px){
+  .dashboard-container {flex-direction:column;}
+  .sidebar {width:100%; text-align:center;}
+  .sidebar ul {flex-direction:row; justify-content:center; flex-wrap:wrap;}
+  .sidebar ul li {margin:5px 10px;}
+  .main-content {padding:15px;}
+
+  /* Footer responsive - vertical and left aligned */
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .footer-left {
+    margin-bottom: 20px;
+  }
+  .footer-right {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .footer-column {
+    align-items: flex-start;
+  }
+  .footer-links li {
+    margin-bottom: 5px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo-container">
+    <img src="logo.jpg" alt="UpliftU Logo">
+    <h2>Volunteer Dashboard</h2>
+  </div>
+  <button onclick="logout()">Logout</button>
+</nav>
+
+<!-- Dashboard -->
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h3>Dashboard</h3>
+    <ul>
+      <li><a href="volunteer.html" class="active">🏠 Home</a></li>
+      <li><a href="profile_v.html">👤 Profile</a></li>
+      <li><a href="peer_v.html">🤝 Peer Support</a></li>
+      <li><a href="resource_v.html">📚 Resources</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <!-- Welcome -->
+    <div id="welcome-screen">
+      <h2>Welcome Volunteer!</h2>
+      <p>“The greatest service we can offer is to uplift and support the mental well-being of those around us.”</p>
+      <button onclick="startTraining()">Start Training</button>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Appreciation -->
+    <div id="appreciation">🎉 Keep going! Complete each step to grow as a volunteer 🎉</div>
+
+    <!-- Training -->
+    <div class="training-container">
+      <!-- Step 1 -->
+      <div class="step-content active" id="step-1">
+        <h3>Step 1: Understanding Mental Health</h3>
+        <p>Mental health is the foundation of overall well-being. Volunteers must understand how emotional, psychological, and social factors affect individuals. This helps in recognizing early signs of distress.</p>
+        <ul>
+          <li>Defining mental health and its importance in daily life.</li>
+          <li>Recognizing stress, anxiety, depression, and burnout.</li>
+          <li>Understanding peer pressure and social influences.</li>
+          <li>Active listening techniques and creating a safe space.</li>
+          <li>Maintaining empathy, patience, and a non-judgmental approach.</li>
+        </ul>
+        <button class="complete-btn" onclick="completeStep(1)">Complete Step 1</button>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-content" id="step-2">
+        <h3>Step 2: Communication & Empathy Skills</h3>
+        <p>Effective communication is key in peer support. Volunteers need to engage students empathetically while fostering trust and open discussions.</p>
+        <ul>
+          <li>Active listening and validating feelings.</li>
+          <li>Responding empathetically without giving unsolicited advice.</li>
+          <li>Encouraging self-expression and reflection.</li>
+          <li>Observing non-verbal cues for emotional understanding.</li>
+          <li>Maintaining confidentiality to build trust.</li>
+        </ul>
+        <button class="complete-btn" onclick="completeStep(2)">Complete Step 2</button>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-content" id="step-3">
+        <h3>Step 3: Handling Crisis Situations</h3>
+        <p>Volunteers may encounter students in crisis. Understanding proper response techniques ensures safety and effective support.</p>
+        <ul>
+          <li>Recognizing acute stress, self-harm, or emotional breakdown signs.</li>
+          <li>Using de-escalation methods to reduce tension.</li>
+          <li>Referring students to professional mental health services.</li>
+          <li>Practicing self-care to prevent burnout.</li>
+          <li>Documenting incidents and following up as needed.</li>
+        </ul>
+        <button class="complete-btn" onclick="completeStep(3)">Complete Step 3</button>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-content" id="step-4">
+        <h3>Step 4: Resources & Referral</h3>
+        <p>Providing accurate information about resources is essential. Volunteers must guide students to appropriate support to ensure continued well-being.</p>
+        <ul>
+          <li>Familiarity with campus counseling, helplines, and online platforms.</li>
+          <li>Connecting students to community mental health organizations.</li>
+          <li>Understanding documentation and ethical reporting requirements.</li>
+          <li>Continuing education for volunteer effectiveness.</li>
+          <li>Maintaining professionalism while providing support.</li>
+        </ul>
+        <button class="complete-btn" onclick="completeStep(4)">Finish Training</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-left">
+      <h4>About UpliftU</h4>
+      <p>UpliftU supports the mental health and well-being of higher education students through guidance and a caring community.</p>
+    </div>
+    <div class="footer-right">
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="about_v.html">About Us</a></li>
+          <li><a href="contact_v.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Policies</h4>
+        <ul class="footer-links">
+          <li><a href="privac_v.html">Privacy Policy</a></li>
+          <li><a href="tos_v.html">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Community</h4>
+        <ul class="footer-links">
+          <li><a href="events_v.html">Events</a></li>
+          <li><a href="forum_v.html">Forum</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+</footer>
+
+<!-- Confetti -->
+<canvas id="confetti"></canvas>
+
+<script>
+let currentStep = 1;
+const totalSteps = 4;
+
+function startTraining(){
+  document.getElementById('welcome-screen').style.display='none';
+  document.querySelector('.progress-container').style.display='block';
+  document.getElementById('appreciation').style.display='block';
+  document.querySelector('.training-container').style.display='block';
+}
+
+function completeStep(step){
+  document.getElementById(`step-${step}`).classList.remove('active');
+  const progress=(step/totalSteps)*100;
+  document.getElementById('progressBar').style.width=progress+'%';
+  if(step<totalSteps){
+    currentStep=step+1;
+    document.getElementById(`step-${currentStep}`).classList.add('active');
+  } else {
+    document.getElementById('appreciation').innerHTML="🎉 Congratulations! You completed Volunteer Training 🎉<br>You’re ready to uplift others.";
+    startConfetti();
+  }
+}
+
+function startConfetti(){
+  const canvas=document.getElementById('confetti');
+  const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+  const pieces=[];
+  const colors=['#1E6091','#2563eb','#155077','#eef4ff','#B3D8FF'];
+  for(let i=0;i<150;i++){
+    pieces.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height-canvas.height,
+      r:Math.random()*6+4,
+      d:Math.random()*20,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      tilt:Math.random()*10-10
+    });
+  }
+  let angle=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      ctx.beginPath();
+      ctx.moveTo(p.x+p.tilt,p.y);
+      ctx.lineTo(p.x+p.tilt+p.r/2,p.y+p.r);
+      ctx.lineTo(p.x+p.tilt-p.r/2,p.y+p.r);
+      ctx.fillStyle=p.color;
+      ctx.fill();
+      p.y+=2+Math.sin(angle+p.d/2);
+      p.x+=Math.sin(angle);
+      if(p.y>canvas.height)p.y=-10;
+    });
+    angle+=0.02;
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function logout(){
+  alert("You have been logged out!");
+  window.location.href="index.html";
+}
+</script>
+</body>
+</html>

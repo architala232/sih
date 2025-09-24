@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wellness Resources - UpliftU</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #1E6091;
+      --dark-navy: #0D1B2A;
+      --light-bg: linear-gradient(135deg, #E6F2FF, #B3D8FF);
+      --gray-text: #0D1B2A;
+      --light-gray: #abb1d1;
+      --hover-blue: #155077;
+      --white: #ffffff;
+      --soft-blue: #D9EFFF;
+    }
+
+    body { 
+      margin:0; 
+      font-family:'Montserrat',sans-serif; 
+      background:var(--light-bg); 
+      color:var(--gray-text); 
+      line-height:1.6; 
+      display:flex; 
+      flex-direction:column; 
+      min-height:100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 25px;
+      border-bottom: 1px solid #c0d4e6;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo img {
+  height: 50px;  
+  width: auto;
+  display: block;}
+    .signin-btn {
+      background: var(--dark-navy);
+      color: var(--white);
+      border: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+      font-size: 0.95rem;
+    }
+    .signin-btn:hover {
+      background: var(--hover-blue);
+      transform: translateY(-2px);
+    }
+
+    /* Dashboard layout */
+    .dashboard-container { 
+      display:flex; 
+      flex:1; /* Grow to fill available space */
+      min-height:0; /* Fix for flexbox overflow */
+    }
+    .sidebar { 
+      background: var(--dark-navy); 
+      color:var(--white); 
+      width:230px; 
+      padding:20px; 
+      flex-shrink:0; 
+      height: 800px;
+    }
+    .sidebar h3 { margin-bottom:20px; font-size:1.3rem; }
+    .sidebar ul { list-style:none; padding:0; }
+    .sidebar ul li { margin:15px 0; }
+    .sidebar ul li a { 
+      text-decoration:none; 
+      color:var(--white); 
+      display:block; 
+      padding:10px; 
+      border-radius:6px; 
+      transition:0.3s; 
+      font-weight:500;
+      font-size: 15px;
+    }
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active { background:var(--hover-blue); }
+
+    .main-content { 
+      flex:1; /* Grow to push footer down */
+      padding:25px; 
+      min-height:0; 
+    }
+
+    /* Resource Sections */
+    .resource-section { 
+      margin-bottom:20px; 
+      border-radius:12px; 
+      border:1px solid var(--primary-blue); 
+      overflow:hidden; 
+      background:var(--soft-blue);
+      box-shadow:0 6px 15px rgba(0,0,0,0.08);
+    }
+    .resource-header { 
+      background:var(--primary-blue); 
+      color:var(--white); 
+      padding:12px 15px; 
+      cursor:pointer; 
+      font-size:15px; 
+      font-weight:bold; 
+    }
+    .resource-content { 
+      display:none; 
+      padding:15px; 
+      background:var(--soft-blue); 
+    }
+    .sub-section { margin-bottom:12px; }
+    .sub-section h4 { color:var(--primary-blue); margin-bottom:8px; font-size:14px; }
+    .options { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px,1fr)); gap:10px; }
+    .option { 
+      background:var(--soft-blue); 
+      border:1px solid var(--primary-blue); 
+      border-radius:8px; 
+      padding:10px; 
+      text-align:center; 
+      transition:all 0.2s ease; 
+      cursor:pointer; 
+      font-size:12px; 
+    }
+    .option:hover { 
+      transform:translateY(-2px); 
+      box-shadow:0 2px 6px rgba(0,0,0,0.1); 
+      background:#d6e4f0; 
+    }
+    .option h5 { margin-bottom:4px; color:var(--primary-blue); font-size:13px; }
+    .option p { font-size:11px; color:var(--dark-navy); margin:0; }
+    .option a { text-decoration:none; display:block; color:inherit; }
+
+    /* Search bar */
+    .top-bar { display:flex; justify-content:center; margin-bottom:15px; }
+    .top-bar input { 
+      padding:8px 12px; 
+      border-radius:8px; 
+      border:1px solid var(--primary-blue);               
+      width:280px; 
+      font-size:13px; 
+    }
+
+    /* Footer */  
+    footer {
+      background: var(--dark-navy);
+      color: var(--white);
+      padding: 40px 20px 20px;
+      flex-shrink:0; /* Ensures footer doesn't shrink */
+    }
+    .footer-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: auto;
+      gap: 30px;
+    }
+    .footer-left { flex: 1 1 300px; }
+    .footer-left h4 { margin-bottom: 10px; font-size: 18px; color: var(--primary-blue); }
+    .footer-left p { font-size: 14px; color: #d1d5db; line-height: 1.6; }
+    .footer-right { display: flex; flex: 2; gap: 40px; flex-wrap: wrap; }
+    .footer-column h4 { margin-bottom: 10px; font-size: 16px; color: var(--primary-blue); }
+    .footer-links { list-style: none; padding: 0; }
+    .footer-links li { margin-bottom: 8px; }
+    .footer-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+    .footer-links a:hover {
+      color: var(--light-gray);
+      text-decoration: underline;
+    }
+    .footer-copy {
+      text-align: center;
+      font-size: 13px;
+      color: var(--light-gray);
+      margin-top: 20px;
+      border-top: 1px solid #2d3d55;
+      padding-top: 10px;
+    }
+
+/* Responsive Dashboard */
+@media(max-width: 900px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  /* Sidebar turns into horizontal bar */
+  .sidebar {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;  /* Make heading and menu inline */
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    flex-wrap: wrap;
+
+    position: sticky;
+    top: 60px; 
+    z-index: 999;
+    background: #051a2b;
+    gap: 15px; /* spacing between heading and menu */
+  }
+
+  /* Dashboard heading stays to the left */
+  .sidebar h3 {
+    display: block;
+    font-size: 1.2rem;
+    margin: 0;
+    color: #ffffff;
+    white-space: nowrap; /* prevent breaking */
+  }
+
+  /* Menu next to heading */
+  .sidebar ul {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sidebar ul li {
+    margin: 0;
+  }
+
+  .sidebar ul li a {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+
+  /* Footer stacked */
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-right {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">
+  <img src="logo.jpg" alt="UpliftU Logo">
+</div>
+  <button class="signin-btn" onclick="logout()">Logout</button>
+</nav>
+
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <h3>Dashboard</h3>
+    <ul>
+      <li><a href="student.html">🏠 Home</a></li>
+      <li><a href="student_profile.html">👤 Profile</a></li>
+      <li><a href="quiz.html">📑 Quiz</a></li>
+      <li><a href="student_booking.html">📅 Booking</a></li>
+      <li><a href="student_peer.html">🤝 Peer Support</a></li>
+      <li><a href="chatbot.html">🤖 AI Chatbot</a></li>
+      <li><a href="resources.html" class="active">📚 Resources</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <h2>Wellness Resources</h2>
+    <div class="top-bar">
+      <input type="text" id="search" placeholder="Search resources...">
+    </div>
+
+    <!-- Stress Management -->
+    <div class="resource-section">
+      <div class="resource-header">Stress Management</div>
+      <div class="resource-content">
+        <div class="sub-section">
+          <h4>Videos 🎥</h4>
+          <div class="options">
+            <div class="option"><a href="#"><h5>🎥 Stress Video 1</h5><p>Guided meditation</p></a></div>
+            <div class="option"><a href="#"><h5>🎥 Stress Video 2</h5><p>Breathing exercise</p></a></div>
+          </div>
+        </div>
+        <div class="sub-section">
+          <h4>Articles 📄</h4>
+          <div class="options">
+            <div class="option"><a href="#"><h5>📄 Stress Article 1</h5><p>How to cope with stress</p></a></div>
+            <div class="option"><a href="#"><h5>📄 Stress Article 2</h5><p>Stress management tips</p></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sleep -->
+    <div class="resource-section">
+      <div class="resource-header">Sleep</div>
+      <div class="resource-content">
+        <div class="sub-section">
+          <h4>Videos 🎥</h4>
+          <div class="options">
+            <div class="option"><a href="#"><h5>🎥 Sleep Video 1</h5><p>Relaxing sleep meditation</p></a></div>
+            <div class="option"><a href="#"><h5>🎥 Sleep Video 2</h5><p>Sleep hygiene tips</p></a></div>
+          </div>
+        </div>
+        <div class="sub-section">
+          <h4>Articles 📄</h4>
+          <div class="options">
+            <div class="option"><a href="#"><h5>📄 Sleep Article 1</h5><p>Improve your sleep</p></a></div>
+            <div class="option"><a href="#"><h5>📄 Sleep Article 2</h5><p>Sleep routines</p></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anxiety -->
+    <div class="resource-section">
+      <div class="resource-header">Anxiety</div>
+      <div class="resource-content">
+        <div class="sub-section">
+          <h4>Videos 🎥</h4>
+          <div class="options">
+            <div class="option"><a href="#"><h5>🎥 Anxiety Video 1</h5><p>Calming techniques</p></a></div>
+            <div class="option"><a href="#"><h5>🎥 Anxiety Video 2</h5><p>Mindfulness session</p></a></div>
+          </div>
+        </div>
+        <div class="sub-section">
+          <h4>Articles 📄</h4>
+          <div class="options">
+            <div class="option"><a href="#"><h5>📄 Anxiety Article 1</h5><p>Managing anxiety</p></a></div>
+            <div class="option"><a href="#"><h5>📄 Anxiety Article 2</h5><p>Anxiety coping strategies</p></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Depression -->
+    <div class="resource-section">
+      <div class="resource-header">Depression</div>
+      <div class="resource-content">
+        <div class="sub-section">
+          <h4>Videos 🎥</h4>
+          <div class="options">
+            <div class="option"><a href="#"><h5>🎥 Depression Video 1</h5><p>Mood improvement exercises</p></a></div>
+            <div class="option"><a href="#"><h5>🎥 Depression Video 2</h5><p>Positive thinking guide</p></a></div>
+          </div>
+        </div>
+        <div class="sub-section">
+          <h4>Articles 📄</h4>
+          <div class="options">
+            <div class="option"><a href="#"><h5>📄 Depression Article 1</h5><p>Understanding depression</p></a></div>
+            <div class="option"><a href="#"><h5>📄 Depression Article 2</h5><p>Recovery tips</p></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-left">
+      <h4>About UpliftU</h4>
+      <p>UpliftU is dedicated to supporting the mental health and well-being of higher education students. We provide resources, professional guidance, and a supportive community to help students thrive.</p>
+    </div>
+    <div class="footer-right">
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="student_about.html">About Us</a></li>
+          <li><a href="student_contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Policies</h4>
+        <ul class="footer-links">
+          <li><a href="student_policy.html">Privacy Policy</a></li>
+          <li><a href="student_tos.html">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Community</h4>
+        <ul class="footer-links">
+          <li><a href="student_forum.html">Forum</a></li>
+          <li><a href="student_event.html">Events</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+</footer>
+
+<script>
+  // Accordion toggle for resources
+  const headers = document.querySelectorAll('.resource-header');
+  headers.forEach(header => {
+    header.addEventListener('click', () => {
+      const content = header.nextElementSibling;
+      content.style.display = content.style.display === 'block' ? 'none' : 'block';
+    });
+  });
+
+  // Search filter for resources
+  const searchInput = document.getElementById('search');
+  searchInput.addEventListener('input', () => {
+    const filter = searchInput.value.toLowerCase();
+    const sections = document.querySelectorAll('.resource-section');
+    sections.forEach(section => {
+      const text = section.textContent.toLowerCase();
+      section.style.display = text.includes(filter) ? 'block' : 'none';
+    });
+  });
+  function logout(){
+  alert("Logged out!");
+  window.location.href="index.html";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Profile - UpliftU</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-blue: #1E6091;
+  --hover-blue: #155077;
+  --sidebar-bg: #0D1B2A;
+  --content-bg: #f9f9fb;
+  --white: #fff;
+  --gray-text: #0D1B2A;
+  --footer-bg: #0D1B2A;
+  --footer-link: #ccc;
+  --light-gray: #abb1d1;
+}
+
+/* Reset & Base */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+body, html { background: var(--content-bg); color: var(--gray-text); min-height: 100vh; display: flex; flex-direction: column; }
+
+/* Navbar */
+.navbar {
+  background: var(--white);
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 20px; border-bottom:1px solid #ddd;
+  position: sticky; top:0; z-index:1000;
+}
+.nav-left {
+  display:flex; align-items:center; gap:12px;
+}
+.logo img { height: 45px; }
+.navbar h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--gray-text);
+}
+.navbar button {
+  background:var(--primary-blue); color:var(--white);
+  border:none; padding:8px 16px; border-radius:8px;
+  font-weight:600; cursor:pointer; transition:0.3s;
+}
+.navbar button:hover { background:var(--hover-blue); }
+
+/* Layout */
+.dashboard-container {
+  display:flex;
+  flex:1;
+  min-height:calc(100vh - 70px);
+  gap:15px;
+}
+
+/* Sidebar */
+.sidebar {
+  width:220px;
+  background:var(--sidebar-bg);
+  color:var(--white);
+  padding:20px 15px;
+  flex-shrink:0;
+}
+.sidebar h3 { margin-bottom:15px; font-size:1.2rem; }
+.sidebar ul { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; }
+.sidebar li { margin:10px 0; }
+.sidebar a {
+  text-decoration:none; display:block; padding:10px 14px;
+  color:var(--white); border-radius:8px; transition:0.3s;
+}
+.sidebar a:hover, .sidebar a.active { background:var(--primary-blue); }
+
+/* Main Content */
+.main-content {
+  flex:1;
+  padding:30px;
+  overflow-y:auto;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+}
+.container {
+  width:100%;
+  max-width:700px;
+  background:var(--white);
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.08);
+}
+h2 { text-align:center; margin-bottom:10px; color: var(--primary-blue); font-size:1.6rem; }
+h4 { text-align:center; margin-bottom:20px; font-weight:500; color:#555; }
+
+/* Profile photo */
+.photo-upload { text-align:center; margin-bottom:25px; }
+.photo-circle {
+  width:140px; height:140px; border-radius:50%;
+  border:2px dashed var(--light-gray);
+  display:flex; align-items:center; justify-content:center;
+  margin:auto; overflow:hidden; position:relative;
+  background:#f4f7fb; cursor:pointer;
+}
+.photo-circle img { width:100%; height:100%; object-fit:cover; display:none; }
+.photo-circle input { display:none; }
+.upload-label { position:absolute; font-size:13px; font-weight:600; color:var(--gray-text); text-align:center; }
+
+/* Info Grid */
+.info-grid { display:flex; flex-direction:column; gap:15px; }
+.info-item label { font-weight:600; margin-bottom:4px; font-size:14px; }
+.info-item input {
+  width:100%; padding:10px; border:1px solid var(--light-gray);
+  border-radius:8px; font-size:14px;
+}
+.info-item input:focus { outline:none; border-color: var(--primary-blue); }
+
+/* Inline Button */
+.info-item-wrapper { position:relative; }
+.inline-btn {
+  position:absolute; right:12px; top:30px;
+  background:var(--primary-blue); color:#fff;
+  border:none; padding:6px 12px; font-size:12px;
+  border-radius:6px; cursor:pointer;
+}
+.inline-btn:hover { background:var(--hover-blue); }
+
+/* Update Button */
+.btn-update {
+  margin-top:20px; display:block; margin-left:auto; margin-right:auto;
+  padding:12px 25px; background:var(--primary-blue); color:#fff;
+  border:none; border-radius:8px; font-weight:600; cursor:pointer; transition:0.3s;
+}
+.btn-update:hover { background:var(--hover-blue); }
+
+/* Footer */
+footer { background:var(--footer-bg); color:#fff; padding:30px 20px 20px; }
+.footer-container { display:flex; flex-wrap:wrap; justify-content:space-between; max-width:1200px; margin:auto; gap:20px; }
+.footer-column h4 { margin-bottom:10px; color:var(--primary-blue); }
+.footer-links { list-style:none; padding:0; }
+.footer-links li { margin-bottom:6px; }
+.footer-links a { color:var(--footer-link); text-decoration:none; transition:0.3s; }
+.footer-links a:hover { color:#fff; }
+.footer-copy { text-align:center; margin-top:20px; font-size:13px; border-top:1px solid rgba(255,255,255,0.2); padding-top:10px; }
+
+/* Responsive */
+@media(max-width:1024px){
+  .dashboard-container { flex-direction:column; }
+  .sidebar {
+    width:100%; flex-direction:row; overflow-x:auto;
+    display:flex; padding:10px;
+  }
+  .sidebar ul { flex-direction:row; gap:10px; width:max-content; }
+  .sidebar li { margin:0; }
+}
+@media(max-width:768px){
+  .main-content { padding:20px; }
+  .container { padding:20px; }
+  .photo-circle { width:110px; height:110px; }
+}
+@media(max-width:480px){
+  .navbar { flex-direction:column; align-items:flex-start; gap:10px; }
+  .nav-left { flex-direction:column; align-items:flex-start; gap:5px; }
+  h2 { font-size:1.2rem; }
+  h4 { font-size:0.9rem; }
+  .inline-btn { font-size:11px; padding:5px 10px; }
+  .container { padding:15px; }
+  .footer-container { flex-direction:column; text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="nav-left">
+    <div class="logo"><img src="logo.jpg" alt="UpliftU Logo"></div>
+    <h3>Admin Dashboard</h3>
+  </div>
+  <button>Logout</button>
+</nav>
+
+<!-- Dashboard -->
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <ul>
+      <li><a href="admin.html">🏠 Home</a></li>
+      <li><a href="profile_a.html" class="active">👤 Profile</a></li>
+      <li><a href="peer_a.html">💬 Peer Support</a></li>
+      <li><a href="userm.html">👥 User Management</a></li>
+      <li><a href="resource_a.html">📊 Resource Management</a></li>
+      <li><a href="analytics.html">📈 Analytics</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <div class="container">
+      <h2>Admin Profile</h2>
+      <h4>System Administrator</h4>
+
+      <!-- Photo -->
+      <div class="photo-upload">
+        <label class="photo-circle">
+          <input type="file" accept="image/*" onchange="previewPhoto(event)">
+          <img id="photoPreview" src="" alt="Profile Photo">
+          <span class="upload-label">Upload<br>Photo</span>
+        </label>
+      </div>
+
+      <!-- Info -->
+      <div class="info-grid">
+        <div class="info-item"><label>Full Name</label><input type="text" value="John Doe" readonly></div>
+        <div class="info-item"><label>Username</label><input type="text" value="admin_upliftu" readonly></div>
+        
+        <div class="info-item-wrapper">
+          <div class="info-item"><label>Contact</label><input type="text" id="contact-input" value="+91 98765 43210" readonly></div>
+          <button class="inline-btn" onclick="toggleEdit('contact')">Change</button>
+        </div>
+
+        <div class="info-item-wrapper">
+          <div class="info-item"><label>Email</label><input type="text" id="email-input" value="admin@upliftu.com" readonly></div>
+          <button class="inline-btn" onclick="toggleEdit('email')">Change</button>
+        </div>
+
+        <div class="info-item"><label>Role</label><input type="text" value="Administrator" readonly></div>
+      </div>
+
+      <button class="btn-update" onclick="saveProfile()">Update Profile</button>
+    </div>
+  </main>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-column">
+      <h4>About UpliftU</h4>
+      <p>Supporting student mental health and volunteer collaboration through resources and peer guidance.</p>
+    </div>
+    <div class="footer-column">
+      <h4>Quick Links</h4>
+      <ul class="footer-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Profile</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h4>Policies</h4>
+      <ul class="footer-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h4>Community</h4>
+      <ul class="footer-links">
+        <li><a href="#">Forum</a></li>
+        <li><a href="#">Events</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+</footer>
+
+<script>
+function previewPhoto(event){
+  const preview = document.getElementById('photoPreview');
+  preview.src = URL.createObjectURL(event.target.files[0]);
+  preview.style.display = 'block';
+  document.querySelector('.upload-label').style.display='none';
+}
+function toggleEdit(field){
+  const input = document.getElementById(field+'-input');
+  if(input.hasAttribute('readonly')){
+    input.removeAttribute('readonly'); input.focus();
+    event.target.innerText = "Save";
+  } else {
+    input.setAttribute('readonly',true);
+    event.target.innerText = "Change";
+    alert(field.charAt(0).toUpperCase()+field.slice(1)+' updated!');
+  }
+}
+function saveProfile(){ alert('Admin profile updated successfully!'); }
+</script>
+
+</body>
+</html>

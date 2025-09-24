@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ - UpliftU</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+* {margin:0; padding:0; box-sizing:border-box; font-family:'Montserrat',sans-serif;}
+body {background:#f8f9fa; color:#0D1B2A; line-height:1.6;}
+
+/* Navbar */
+nav {
+  position: sticky; top:0; width:100%; background:#fff; z-index:1000;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:15px 50px; box-shadow:0 4px 12px rgba(0,0,0,0.08); flex-wrap:wrap;
+}
+nav .logo img {height:50px;}
+.menu-toggle {display:none; font-size:28px; cursor:pointer; color:#1E6091; user-select:none; z-index:1001; transition: transform 0.3s;}
+nav .nav-links {list-style:none; display:flex; align-items:center; gap:25px; transition:max-height 0.5s ease-in-out; overflow:hidden;}
+nav .nav-links li a, nav .signin-btn a {text-decoration:none; font-weight:600; color:#0D1B2A; padding:8px 15px; transition:all 0.3s;}
+nav .nav-links li a:hover {color:#1E6091;}
+nav .signin-btn {background:#1E6091; color:#fff; border:none; border-radius:6px; cursor:pointer; transition:all 0.3s;}
+nav .signin-btn:hover {background:#155077; transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+nav .signin-btn a {color:#fff; display:block;}
+
+/* Dropdown */
+.nav-links .dropdown {position:relative; cursor:pointer;}
+.nav-links .dropdown > a::after {content:"▼"; font-size:0.7rem; margin-left:5px; transition: transform 0.3s;}
+.dropdown.active > a::after {transform: rotate(180deg);}
+.dropdown-menu {
+  position:absolute; top:100%; left:0; width:350px; background:#fff; box-shadow:0 6px 20px rgba(0,0,0,0.1);
+  border-radius:8px; padding:10px 0; z-index:1000; max-height:0; overflow:hidden; transition:max-height 0.5s ease, padding 0.5s ease;
+}
+
+/* Show dropdown menu on desktop */
+@media screen and (min-width: 950px) {
+  .dropdown-menu {
+    display:block !important;
+    max-height:none !important;
+    padding:10px 0;
+  }
+}
+
+/* FAQ */
+.faq-container {max-width:900px; margin:60px auto; padding:0 20px;}
+.faq-item {border-bottom:1px solid #ddd;}
+.faq-question {width:100%; background:none; border:none; padding:15px 20px; text-align:left; font-weight:600; cursor:pointer; color:#0D1B2A; display:flex; justify-content:space-between; align-items:center; transition: background 0.3s, transform 0.3s; font-size:1.05rem;}
+.faq-question:hover {background:#f0f0f0;}
+.faq-answer {max-height:0; overflow:hidden; padding:0 20px; font-weight:400; color:#333; line-height:1.5; transition:max-height 0.4s ease, padding 0.4s ease;}
+.faq-item.active .faq-answer {max-height:300px; padding:12px 20px;}
+
+/* Footer */
+footer {background:#0D1B2A; color:#fff; padding:40px 20px; margin-top:60px;}
+.footer-container {display:flex; flex-wrap:wrap; justify-content:space-between; gap:30px; max-width:1200px; margin:auto;}
+.footer-left {flex:1; min-width:250px;}
+.footer-left h2 {font-size:1.8rem; margin-bottom:10px; color:#fff;}
+.footer-left p {color:#ccc; font-size:0.95rem; line-height:1.6;}
+.footer-right {display:flex; gap:40px; flex-wrap:wrap;}
+.footer-column h4 {font-size:1.1rem; margin-bottom:10px; color:#fff;}
+.footer-links {list-style:none; padding:0;}
+.footer-links li {margin-bottom:8px;}
+.footer-links a {color:#abb1d1; text-decoration:none; transition:0.3s;}
+.footer-links a:hover {color:#fff;}
+.footer-copy {text-align:center; margin-top:25px; font-size:0.95rem; color:#ccc;}
+
+/* Responsive */
+@media screen and (max-width:950px){
+  .menu-toggle {display:block;}
+  nav {flex-direction:row; justify-content:space-between;}
+  nav .nav-links {flex-direction:column; gap:15px; max-height:0; overflow:hidden; width:100%;}
+  nav .nav-links.active {max-height:1500px;}
+  .dropdown-menu {position:static; width:100%; max-height:0; padding:0;}
+  .dropdown.active .dropdown-menu {max-height:1500px; padding:10px 0;}
+  .footer-right {flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+  <div class="logo"><img src="logo.jpg" alt="UpliftU Logo"></div>
+  <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+  <ul class="nav-links">
+  
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+    <li><button class="signin-btn"><a href="login.html">Login</a></button></li>
+  </ul>
+</nav>
+
+<!-- FAQ Section -->
+<section class="faq-container">
+  <h1 style="text-align:center; margin-bottom:40px; color:#1E6091;">Frequently Asked Questions</h1>
+  <div class="faq-item">
+    <button class="faq-question">What is UpliftU?</button>
+    <div class="faq-answer">UpliftU is a platform dedicated to student mental health and personal growth.</div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question">Is UpliftU free?</button>
+    <div class="faq-answer">Most features are free, but some professional services may require payment.</div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question">Can I access counseling anonymously?</button>
+    <div class="faq-answer">Yes, you can access many features anonymously without revealing personal details.</div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question">Do I need an account?</button>
+    <div class="faq-answer">Some features require an account for tracking progress and accessing personalized resources.</div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question">How do I reset my password?</button>
+    <div class="faq-answer">You can reset your password via the "Forgot Password" link on the login page.</div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question">Can I book a counseling session online?</button>
+    <div class="faq-answer">Yes, you can schedule sessions with certified professionals through the platform.</div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question">Where can I find mental health resources?</button>
+    <div class="faq-answer">Resources are available in the "Resources" section after logging into your account.</div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-left">
+      <h2>About UpliftU</h2>
+      <p>Supporting student mental health with guidance, resources, and a caring community. We are committed to helping students thrive academically and personally.</p>
+    </div>
+    <div class="footer-right">
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Policies</h4>
+        <ul class="footer-links">
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="tos.html">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Community</h4>
+        <ul class="footer-links">
+          <li><a href="event.html">Events</a></li>
+          <li><a href="forum.html">Forum</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+</footer>
+
+<script>
+// Hamburger toggle
+const menuToggle = document.getElementById('menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+menuToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
+  menuToggle.style.transform = navLinks.classList.contains('active') ? 'rotate(90deg)' : 'rotate(0deg)';
+});
+
+// Dropdown toggle for mobile
+document.querySelectorAll(".dropdown > a").forEach(link => {
+  link.addEventListener("click", e => {
+    if(window.innerWidth < 950){
+      e.preventDefault();
+      const parent = link.parentElement;
+      parent.classList.toggle("active");
+    }
+  });
+});
+
+// FAQ accordion
+document.querySelectorAll('.faq-question').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    item.classList.toggle('active');
+    document.querySelectorAll('.faq-item').forEach(f => {
+      if(f !== item) f.classList.remove('active');
+    });
+  });
+});
+</script>
+</body>
+</html>

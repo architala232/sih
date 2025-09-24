@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Mental Health Quiz - UpliftU</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-blue: #1E6091;
+  --hover-blue: #155077;
+  --dark-navy: #0D1B2A;
+  --white: #ffffff;
+  --light-bg: linear-gradient(135deg, #E6F2FF, #B3D8FF);
+  --gray-text: #0D1B2A;
+  --soft-blue: #D9EFFF;
+  --light-gray: #abb1d1;
+}
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: var(--light-bg);
+  color: var(--gray-text);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  background: var(--white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 25px;
+  border-bottom: 1px solid #c0d4e6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+}
+.logo img { height: 50px; width:auto; }
+.navbar .signout-btn {
+  background: var(--dark-navy);
+  color: var(--white);
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.navbar .signout-btn:hover { background: var(--hover-blue); }
+
+/* Dashboard Layout */
+.dashboard-container { display: flex; flex: 1; min-height: 90vh; }
+.sidebar { background: var(--dark-navy); color: var(--white); width: 220px; padding: 20px; flex-shrink: 0; }
+.sidebar h3 { margin-bottom: 20px; font-size: 1.2rem; }
+.sidebar ul { list-style: none; padding: 0; }
+.sidebar ul li { margin: 12px 0; }
+.sidebar ul li a { text-decoration: none; color: var(--white); display: block; padding: 10px; border-radius: 6px; transition: 0.3s; }
+.sidebar ul li a:hover,
+.sidebar ul li a.active { background: var(--hover-blue); }
+
+/* Main Content */
+.main-content { flex: 1; padding: 25px; }
+.main-quiz { max-width: 900px; margin: auto; padding: 25px; background: var(--soft-blue); border-radius: 15px; box-shadow: 0 6px 18px rgba(0,0,0,0.1); text-align: center; }
+.main-quiz h2 { color: var(--primary-blue); margin-bottom: 20px; }
+button { background: var(--primary-blue); color: var(--white); padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; margin-top: 15px; font-size: 15px; }
+button:hover { background: var(--hover-blue); }
+
+/* Quiz options */
+.option { display: block; margin: 8px 0; padding: 10px; border-radius: 8px; border: 2px solid var(--primary-blue); cursor: pointer; background: #ffffff; transition: 0.3s; }
+.option input { display: none; }
+.option.selected { background: var(--primary-blue); color: #fff; }
+
+/* Progress bar */
+.progress-container { width: 100%; background: #e2e8f0; border-radius: 8px; margin: 15px 0; height: 18px; overflow: hidden; }
+.progress-bar { height:100%; width:0%; background: var(--primary-blue); transition: width 0.3s; }
+
+/* Result boxes */
+.result-box { margin: 15px 0; padding: 15px; border-radius: 10px; font-weight: 600; text-align: left; }
+.result-box small { font-weight: 400; }
+.normal { background:#c6f6d5; color:#22543d; }
+.moderate { background:#fefcbf; color:#744210; }
+.severe { background:#fed7d7; color:#742a2a; }
+/* Footer */
+footer {
+  background: var(--dark-navy);
+  color: var(--white);
+  padding: 40px 20px 20px;
+  margin-top: auto;
+}
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+.footer-left {
+  flex: 1 1 300px;
+}
+.footer-left h4 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: var(--primary-blue);
+}
+.footer-left p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #d1d5db;
+}
+.footer-right {
+  display: flex;
+  flex: 2;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.footer-column h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: var(--primary-blue);
+}
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+.footer-links li {
+  margin-bottom: 8px;
+}
+.footer-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
+.footer-links a:hover {
+  color: var(--light-gray);
+  text-decoration: underline;
+}
+.footer-copy {
+  text-align: center;
+  font-size: 13px;
+  color: #abb1d1;
+  margin-top: 20px;
+  border-top: 1px solid #2d3d55;
+  padding-top: 10px;
+}
+
+/* Responsive */
+@media(max-width: 900px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  /* Sidebar turns into horizontal bar */
+  .sidebar {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;  /* Make heading and menu inline */
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    flex-wrap: wrap;
+
+    position: sticky;
+    top: 60px; 
+    z-index: 999;
+    background: #051a2b;
+    gap: 15px; /* spacing between heading and menu */
+  }
+
+  /* Dashboard heading stays to the left */
+  .sidebar h3 {
+    display: block;
+    font-size: 1.2rem;
+    margin: 0;
+    color: #ffffff;
+    white-space: nowrap; /* prevent breaking */
+  }
+
+  /* Menu next to heading */
+  .sidebar ul {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sidebar ul li {
+    margin: 0;
+  }
+
+  .sidebar ul li a {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+
+  /* Footer stacked */
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-right {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo"><img src="logo.jpg" alt="UpliftU Logo"></div>
+  <button class="signout-btn" onclick="logout()">Logout</button>
+</nav>
+
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h3>Dashboard</h3>
+    <ul>
+      <li><a href="student.html">🏠 Home</a></li>
+      <li><a href="student_profile.html">👤 Profile</a></li>
+      <li><a href="quiz.html" class="active">📑 Quiz</a></li>
+      <li><a href="student_booking.html">📅 Booking</a></li>
+      <li><a href="student_peer.html">🤝 Peer Support</a></li>
+      <li><a href="chatbot.html">🤖 AI Chatbot</a></li>
+      <li><a href="resources.html">📚 Resources</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="main-quiz">
+      <!-- Start Page -->
+      <div id="startPage">
+        <h2>🧠 Student Mental Health Quiz</h2>
+        <p>Answer honestly to assess your mental health across Depression, Anxiety, Stress & Sleep.</p>
+        <button onclick="startQuiz()">Start Quiz</button>
+      </div>
+
+      <!-- Quiz Container -->
+      <div id="quizContainer" style="display:none;">
+        <h2>🧠 Mental Health Quiz</h2>
+        <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+        <div id="question-box"></div>
+        <div>
+          <button id="prevBtn" onclick="prevQuestion()">Previous</button>
+          <button id="nextBtn" onclick="nextQuestion()">Next</button>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="resultsContainer" style="display:none;">
+        <h2>📊 Your Results</h2>
+        <div id="result"></div>
+        <canvas id="resultChart" style="max-width:320px; margin:10px auto;"></canvas>
+        <div id="actionButtons"></div>
+      </div>
+    </div>
+  </main>
+</div>
+<!-- Footer -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-left">
+      <h4>About UpliftU</h4>
+      <p>UpliftU is dedicated to supporting the mental health and well-being of higher education 
+provide resources, professional guidance, and a supportive community to help students thriv
+    </div>
+
+    <div class="footer-right">
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="student_about.html">About Us</a></li>
+          <li><a href="student_contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Policies</h4>
+        <ul class="footer-links">
+          <li><a href="student_policy.html">Privacy Policy</a></li>
+          <li><a href="student_tos.html">Terms of Service</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Community</h4>
+        <ul class="footer-links">
+          <li><a href="student_forum.html">Forum</a></li>
+          <li><a href="student_event.html">Events</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// All 26 questions
+const questions = [
+  // Depression (9)
+  {section:"Depression", text:"Little interest or pleasure in doing things?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Depression", text:"Feeling down, depressed, or hopeless?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Depression", text:"Trouble falling or staying asleep?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Depression", text:"Feeling tired or having little energy?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Depression", text:"Poor appetite or overeating?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Depression", text:"Feeling bad about yourself or like a failure?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Depression", text:"Trouble concentrating on tasks?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Depression", text:"Moving/speaking slowly, or very restless?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Depression", text:"Thoughts of hurting yourself?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+
+  // Anxiety (7)
+  {section:"Anxiety", text:"Feeling nervous, anxious, or on edge?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Anxiety", text:"Not being able to stop worrying?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Anxiety", text:"Worrying too much about different things?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Anxiety", text:"Trouble relaxing?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Anxiety", text:"Being restless or unable to sit still?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Anxiety", text:"Becoming easily annoyed or irritable?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Anxiety", text:"Feeling afraid something awful might happen?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+
+  // Stress (5)
+  {section:"Stress", text:"Feeling overwhelmed by studies?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Stress", text:"Pressure to meet expectations?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Stress", text:"Struggle balancing studies and personal life?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Stress", text:"Feeling you don’t have enough time?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Stress", text:"Physical signs of stress (e.g., headaches)?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+
+  // Sleeping Disorder (5)
+  {section:"Sleeping Disorder", text:"Trouble falling asleep?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Sleeping Disorder", text:"Waking up frequently at night?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Sleeping Disorder", text:"Sleeping more than usual?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Sleeping Disorder", text:"Waking up tired/unrested?", options:["Not at all","Several days","More than half the days","Nearly every day"]},
+  {section:"Sleeping Disorder", text:"Nightmares or disturbed sleep?", options:["Not at all","Several days","More than half the days","Nearly every day"]}
+];
+
+let currentQ = 0;
+let answers = new Array(questions.length).fill(null);
+
+function startQuiz(){
+  document.getElementById("startPage").style.display="none";
+  document.getElementById("quizContainer").style.display="block";
+  loadQuestion();
+}
+
+function loadQuestion(){
+  let q = questions[currentQ];
+  let box = document.getElementById("question-box");
+  box.innerHTML = `<h3>${q.section}</h3><p>${q.text}</p>` + 
+    q.options.map((opt,i)=>`
+      <label class="option ${answers[currentQ]===i?'selected':''}">
+        <input type="radio" name="answer" value="${i}" ${answers[currentQ]===i?'checked':''}> ${opt}
+      </label>`).join("");
+  addOptionClick();
+  document.getElementById("prevBtn").style.display=currentQ===0?"none":"inline-block";
+  document.getElementById("nextBtn").innerText=currentQ===questions.length-1?"Submit":"Next";
+  document.getElementById("progressBar").style.width=((currentQ+1)/questions.length)*100 + "%";
+}
+
+function addOptionClick(){
+  document.querySelectorAll(".option").forEach(opt=>{
+    opt.addEventListener("click",function(){
+      document.querySelectorAll(".option").forEach(o=>o.classList.remove("selected"));
+      this.classList.add("selected");
+      this.querySelector("input").checked = true;
+      answers[currentQ] = parseInt(this.querySelector("input").value);
+    });
+  });
+}
+
+function nextQuestion(){
+  if(answers[currentQ]===null){ alert("Please select an answer!"); return; }
+  currentQ++;
+  if(currentQ<questions.length) loadQuestion();
+  else showResult();
+}
+
+function prevQuestion(){ if(currentQ>0){currentQ--; loadQuestion();} }
+
+function showResult(){
+  document.getElementById("quizContainer").style.display="none";
+  document.getElementById("resultsContainer").style.display="block";
+
+  let scores = {}, counts = {};
+  answers.forEach((a,i)=>{
+    let sec = questions[i].section;
+    if(!scores[sec]) { scores[sec]=0; counts[sec]=0; }
+    scores[sec]+=a; counts[sec]++;
+  });
+
+  let html="", chartLabels=[], chartData=[], chartColors=[], hasSevere=false, hasModerate=false;
+  for(let sec in scores){
+    let percent=(scores[sec]/(counts[sec]*3))*100;
+    let condition,cls,color,suggestion;
+    if(percent<=33){ condition="Normal"; cls="normal"; color="#48bb78"; suggestion="✅ You seem to be doing well.";}
+    else if(percent<=66){ condition="Moderate"; cls="moderate"; color="#ecc94b"; suggestion="💡 Moderate in "+sec+"."; hasModerate=true; }
+    else{ condition="Severe"; cls="severe"; color="#f56565"; suggestion="⚠️ Severe in "+sec+"."; hasSevere=true; }
+    html += `<div class="result-box ${cls}">${sec}: ${condition} (${Math.round(percent)}%)<br><small>${suggestion}</small></div>`;
+    chartLabels.push(sec); chartData.push(Math.round(percent)); chartColors.push(color);
+  }
+  document.getElementById("result").innerHTML=html;
+  new Chart(document.getElementById("resultChart"),{type:"pie", data:{labels:chartLabels, datasets:[{data:chartData, backgroundColor:chartColors}]}});
+
+  let actions="";
+  if(hasSevere) actions=`<button onclick="window.location.href='booking.html'">📅 Book Appointment</button>`;
+  else if(hasModerate) actions=`<button onclick="window.location.href='chatbot.html'">🤖 Chat with AI</button>
+                                <button onclick="window.location.href='booking.html'">📅 Book Appointment</button>`;
+  else actions=`<button onclick="window.location.href='resources.html'">📚 Explore Resources</button>`;
+  document.getElementById("actionButtons").innerHTML=actions;
+}
+function logout(){
+  alert("Logged out!");
+  window.location.href="index.html";
+}
+</script>
+
+</body>
+</html>

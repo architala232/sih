@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peer Support Chat - UpliftU</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* --- Variables & Base Styles --- */
+:root {
+  --primary-blue: #1E6091;
+  --hover-blue: #155077;
+  --sidebar-bg: #0D1B2A;
+  --content-bg: #f9f9fb;
+  --white: #fff;
+  --text-dark: #0D1B2A;
+  --footer-bg: #0D1B2A;
+  --footer-link: #ccc;
+  --card-bg: #ffffff;
+  --border-color: #e0e0e0;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+body, html {
+  background-color: var(--content-bg);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Top Navbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--white);
+  padding: 12px 24px;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-left img { height: 50px; }
+.topbar-left h2 { color: var(--primary-blue); margin:0; }
+
+.topbar .btn-logout {
+  padding: 8px 14px;
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.topbar .btn-logout:hover { background-color: var(--hover-blue); }
+
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  flex: 1;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: var(--sidebar-bg);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 15px;
+  flex-shrink: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar li { margin: 10px 0; }
+
+.sidebar a {
+  display: block;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: var(--white);
+  border-radius: 8px;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.sidebar a:hover, .sidebar a.active { background: var(--primary-blue); }
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.forum-section {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.forum-header {
+  margin-bottom: 20px;
+}
+
+.forum-header h2 {
+  color: var(--primary-blue);
+  margin: 0;
+}
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.forum-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.forum-table th, .forum-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  background-color: var(--white);
+}
+
+.forum-table th {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.forum-table tr:nth-child(even) td {
+  background-color: var(--content-bg);
+}
+
+/* Action Buttons */
+.action-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+.action-btn:hover {
+  opacity: 0.8;
+}
+
+.btn-delete { background-color: #e74c3c; color: white; }
+.btn-suspend { background-color: #f39c12; color: white; }
+
+/* Keyword Highlighting */
+.highlight {
+  background-color: #fcebeb;
+  color: #d9534f;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* Footer */
+footer {
+  background-color: var(--footer-bg);
+  color: var(--white);
+  padding: 40px 20px 20px 20px;
+  margin-top: auto;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-column { flex: 1 1 220px; }
+.footer-column h4 { color: var(--primary-blue); margin-bottom: 12px; font-size: 1.1rem; }
+.footer-links { list-style: none; padding:0; }
+.footer-links li { margin-bottom: 8px; }
+.footer-links a { color: var(--footer-link); text-decoration: none; transition:0.3s; }
+.footer-links a:hover { color: var(--white); }
+.footer-copy { text-align:center; margin-top:30px; font-size:0.85rem; color: var(--footer-link); border-top:1px solid rgba(255,255,255,0.2); padding-top:12px; }
+
+/* Responsive Adjustments */
+@media(max-width: 768px){
+  .dashboard-container { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    padding: 10px 0;
+    overflow-x: auto;
+  }
+  .sidebar ul {
+    flex-direction: row;
+    width: max-content;
+    gap: 10px;
+    justify-content: flex-start;
+  }
+  .sidebar li { margin: 0; }
+  .topbar-left h2 { font-size: 18px; }
+  .forum-header { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="topbar-left">
+        <img src="logo.jpg" alt="UpliftU Logo">
+        <h2>Admin Dashboard</h2>
+    </div>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+</div>
+
+<div class="dashboard-container">
+    <aside class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="admin.html">🏠 Home</a></li>
+            <li><a href="profile_a.html">👤 Profile</a></li>
+            <li><a href="userm.html">🧑‍🤝‍🧑 User Management</a></li>
+            <li><a href="peer_a.html" class="active">🤝 Peer Support Chat</a></li>
+            <li><a href="resource_a.html">📚 Resource Management</a></li>
+            <li><a href="analytics.html">📊 Analytics</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div id="peer-support" class="section active">
+            <div class="forum-header">
+                <h2>Peer Support Chat</h2>
+            </div>
+            
+            <div class="forum-section">
+                <h3>Flagged Posts (Automated Keyword Detection)</h3>
+                <div class="table-container">
+                    <table class="forum-table">
+                        <thead>
+                            <tr>
+                                <th>Post ID</th>
+                                <th>Content</th>
+                                <th>User ID</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="flagged-posts-table">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="forum-section">
+                <h3>All Forum Posts</h3>
+                <div class="table-container">
+                    <table class="forum-table">
+                        <thead>
+                            <tr>
+                                <th>Post ID</th>
+                                <th>Content</th>
+                                <th>User ID</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-posts-table">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-column">
+            <h4>About UpliftU</h4>
+            <p>Supporting student mental health and volunteer collaboration through resources and peer guidance.</p>
+        </div>
+        <div class="footer-column">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">AboutUs</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Policies</h4>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Community</h4>
+            <ul class="footer-links">
+                <li><a href="#">Forum</a></li>
+                <li><a href="#">Events</a></li>
+            </ul>
+        </div>
+    </div>
+    <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+</footer>
+
+<script>
+// Dummy data for posts
+const postsData = [
+    { id: 'F001', content: 'I\'m struggling and thinking of harming myself. What can I do to get help?', userId: 'SID124', flagged: true },
+    { id: 'F002', content: 'What are some good ways to manage exam stress?', userId: 'SID123', flagged: false },
+    { id: 'F003', content: 'Feeling lonely and isolated at university.', userId: 'SID125', flagged: false },
+    { id: 'F004', content: 'Does anyone else feel like a failure?', userId: 'SID126', flagged: true },
+    { id: 'F005', content: 'Excited about the new semester!', userId: 'SID127', flagged: false },
+];
+
+const flaggedPostsTable = document.getElementById('flagged-posts-table');
+const allPostsTable = document.getElementById('all-posts-table');
+
+// Keywords to highlight in flagged posts
+const flaggedKeywords = ['harming myself', 'suicide', 'hopeless', 'lost', 'failure'];
+
+function renderTable() {
+    flaggedPostsTable.innerHTML = '';
+    allPostsTable.innerHTML = '';
+
+    postsData.forEach(post => {
+        const row = document.createElement('tr');
+        
+        // Highlight keywords for flagged posts
+        let content = post.content;
+        if (post.flagged) {
+            const regex = new RegExp(flaggedKeywords.join('|'), 'gi');
+            content = content.replace(regex, (match) => `<span class="highlight">${match}</span>`);
+        }
+
+        row.innerHTML = `
+            <td>${post.id}</td>
+            <td>${content}</td>
+            <td>${post.userId}</td>
+            <td>
+                <button class="action-btn btn-delete" onclick="deletePost('${post.id}')">Delete Post</button>
+                <button class="action-btn btn-suspend" onclick="suspendUser('${post.userId}')">Suspend User</button>
+            </td>
+        `;
+
+        if (post.flagged) {
+            flaggedPostsTable.appendChild(row);
+        } else {
+            allPostsTable.appendChild(row);
+        }
+    });
+}
+
+function deletePost(postId) {
+    if (confirm(`Are you sure you want to delete post ID ${postId}?`)) {
+        // Remove the post from the data array (simulating a database deletion)
+        const index = postsData.findIndex(post => post.id === postId);
+        if (index > -1) {
+            postsData.splice(index, 1);
+            renderTable(); // Re-render the table
+        }
+        alert(`Post ${postId} has been deleted.`);
+    }
+}
+
+function suspendUser(userId) {
+    if (confirm(`Are you sure you want to suspend user ${userId}? This will remove all their posts and restrict access.`)) {
+        // Simulate suspending a user
+        const postsToRemove = postsData.filter(post => post.userId === userId);
+        if (postsToRemove.length > 0) {
+            postsData.splice(0, postsData.length, ...postsData.filter(post => post.userId !== userId));
+            renderTable();
+        }
+        alert(`User ${userId} has been suspended.`);
+    }
+}
+
+function logout() {
+  alert('Logged out!');
+  window.location.href = 'index.html';
+}
+
+// Initial render of the tables when the page loads
+document.addEventListener('DOMContentLoaded', renderTable);
+</script>
+
+</body>
+</html>

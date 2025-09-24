@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Appointment - UpliftU</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-blue: #1E6091;
+  --hover-blue: #155077;
+  --dark-navy: #0D1B2A;
+  --white: #ffffff;
+  --light-bg: linear-gradient(135deg, #E6F2FF, #B3D8FF);
+  --gray-text: #0D1B2A;
+  --soft-blue: #D9EFFF;
+  --light-gray: #abb1d1;
+}
+
+/* General */
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: var(--light-bg);
+  color: var(--gray-text);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  background: var(--white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1px 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 1000;
+.logo img {
+  height: 50px;  
+  width: auto;
+  display: block;
+}
+}
+.navbar .logout-btn {
+  background: #051a2b;
+  color: var(--white);
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+  font-size: 0.95rem;
+  width: 100px;
+  margin-top: 15px;
+}
+.navbar .logout-btn:hover {
+  background: var(--hover-blue);
+  color: var(--white);
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Sidebar */
+.sidebar {
+  background: var(--dark-navy);
+  color: var(--white);
+  width: 220px;
+  padding: 20px;
+  flex-shrink: 0;
+  height:900px;
+}
+.sidebar h3 { margin-bottom: 20px; font-size: 1.2rem; }
+.sidebar ul { list-style: none; padding: 0; }
+.sidebar ul li { margin: 12px 0; }
+.sidebar ul li a {
+  text-decoration: none;
+  color: var(--white);
+  display: block;
+  padding: 10px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+.sidebar ul li a:hover, .sidebar ul li a.active { background: var(--hover-blue); }
+
+/* Main Content */
+.main-content { flex: 1; padding: 25px; min-height:0; }
+.container {
+  max-width: 600px;
+  margin: auto;
+  background: var(--soft-blue);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0px 6px 16px rgba(0,0,0,0.1);
+}
+h2 { text-align: center; color: var(--primary-blue); margin-bottom: 20px; }
+label { display: block; margin-bottom: 6px; font-weight: bold; color: var(--primary-blue); }
+input, select, button { width: 100%; padding: 12px; margin-bottom: 16px; border: 1px solid var(--primary-blue); border-radius: 8px; font-size: 14px; }
+input[readonly] { background: #eef4ff; color: var(--gray-text); }
+button { background: var(--primary-blue); color: var(--white); cursor: pointer; border: none; transition: 0.3s; }
+button:hover { background: var(--hover-blue); }
+.result {
+  background: #eef4ff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  display: none;
+  color: var(--dark-navy);
+}
+
+/* Footer */
+footer {
+  background: var(--dark-navy);
+  color: var(--white);
+  padding: 40px 20px 10px; /* reduced bottom padding */
+  margin-top: auto;
+}
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+.footer-left { flex: 1 1 300px; }
+.footer-left h4 { margin-bottom: 10px; font-size: 18px; color: var(--primary-blue); }
+.footer-left p { font-size: 14px; line-height: 1.6; color: #d1d5db; margin-bottom:0; }
+.footer-right { display: flex; flex: 2; gap: 40px; flex-wrap: wrap; }
+.footer-column h4 { margin-bottom: 10px; font-size: 16px; color: var(--primary-blue); }
+.footer-links { list-style: none; padding: 0; }
+.footer-links li { margin-bottom: 8px; }
+.footer-links a { color: #ffffff; text-decoration: none; font-size: 14px; transition: 0.3s; }
+.footer-links a:hover { color: var(--light-gray); text-decoration: underline; }
+.footer-copy { text-align: center; font-size: 13px; color: #abb1d1; margin-top: 20px; border-top: 1px solid #2d3d55; padding-top: 10px; }
+ 
+/* Responsive Dashboard */
+@media(max-width: 900px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  /* Sidebar turns into horizontal bar */
+  .sidebar {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;  /* Make heading and menu inline */
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    flex-wrap: wrap;
+
+    position: sticky;
+    top: 60px; 
+    z-index: 999;
+    background: #051a2b;
+    gap: 15px; /* spacing between heading and menu */
+  }
+
+  /* Dashboard heading stays to the left */
+  .sidebar h3 {
+    display: block;
+    font-size: 1.2rem;
+    margin: 0;
+    color: #ffffff;
+    white-space: nowrap; /* prevent breaking */
+  }
+
+  /* Menu next to heading */
+  .sidebar ul {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sidebar ul li {
+    margin: 0;
+  }
+
+  .sidebar ul li a {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+
+  /* Footer stacked */
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-right {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo">
+  <img src="logo.jpg" alt="UpliftU Logo">
+</div>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</nav>
+
+<!-- Dashboard Layout -->
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h3>Dashboard</h3>
+    <ul>
+      <li><a href="student.html">🏠 Home</a></li>
+      <li><a href="student_profile.html">👤 Profile</a></li>
+      <li><a href="quiz.html">📑 Quiz</a></li>
+      <li><a href="student_booking.html" class="active">📅 Booking</a></li>
+      <li><a href="student_peer.html">🤝 Peer Support</a></li>
+      <li><a href="chatbot.html">🤖 AI Chatbot</a></li>
+      <li><a href="resources.html">📚 Resources</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <h2>Book Appointment</h2>
+
+      <label for="username">Student Username</label>
+      <input type="text" id="username" readonly>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required>
+
+      <label for="date">Choose Date</label>
+      <input type="date" id="date" required>
+
+      <label for="time">Choose Time</label>
+      <input type="time" id="time" required>
+
+      <label for="counsellor">Preferred Counsellor</label>
+      <select id="counsellor" required>
+        <option value="">Select a time first</option>
+      </select>
+
+      <button onclick="bookAppointment()">Book Now</button>
+
+      <div class="result" id="resultBox"></div>
+    </div>
+  </main>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-left">
+      <h4>About UpliftU</h4>
+      <p>UpliftU is dedicated to supporting the mental health and well-being of higher education students. We provide resources, professional guidance, and a supportive community to help students thrive.</p>
+    </div>
+    <div class="footer-right">
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="student_about.html">About Us</a></li>
+          <li><a href="student_contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Policies</h4>
+        <ul class="footer-links">
+          <li><a href="student_policy.html">Privacy Policy</a></li>
+          <li><a href="student_tos.html">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Community</h4>
+        <ul class="footer-links">
+          <li><a href="student_forum.html">Forum</a></li>
+          <li><a href="student_event.html">Events</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+</footer>
+
+<script>
+  function generateUsername() {
+    const prefix = "stud";
+    const randomNum = Math.floor(1000 + Math.random() * 9000); 
+    return prefix + randomNum;
+  }
+  document.getElementById("username").value = generateUsername();
+
+  const counsellors = {
+    "09:00": ["Dr. Mehta", "Dr. Sharma"],
+    "10:00": ["Dr. Patel", "Dr. Singh"],
+    "14:00": ["Dr. Reddy", "Dr. Kapoor"],
+    "16:00": ["Dr. Desai"]
+  };
+
+  document.getElementById("time").addEventListener("change", function() {
+    const time = this.value.slice(0,5); 
+    const select = document.getElementById("counsellor");
+    select.innerHTML = "";
+
+    if (counsellors[time]) {
+      counsellors[time].forEach(c => {
+        const option = document.createElement("option");
+        option.value = c;
+        option.textContent = c;
+        select.appendChild(option);
+      });
+    } else {
+      const option = document.createElement("option");
+      option.value = "NA";
+      option.textContent = "No counsellor available at this time";
+      select.appendChild(option);
+    }
+  });
+
+  function bookAppointment() {
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value.trim();
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+    const counsellor = document.getElementById("counsellor").value;
+    const resultBox = document.getElementById("resultBox");
+
+    if (!email || !date || !time || !counsellor) {
+      alert("Please fill all fields.");
+      return;
+    }
+
+    if (counsellor === "NA") {
+      resultBox.innerHTML = `⚠️ No counsellor available at <strong>${time}</strong>. Please choose another time.`;
+    } else {
+      resultBox.innerHTML = `
+        ✅ <strong>Appointment Confirmed!</strong><br><br>
+        <strong>Username:</strong> ${username} <br>
+        <strong>Email:</strong> ${email} <br>
+        <strong>Date:</strong> ${date} <br>
+        <strong>Time:</strong> ${time} <br>
+        <strong>Counsellor:</strong> ${counsellor}
+      `;
+    }
+    resultBox.style.display = "block";
+  }
+
+  function logout() {
+    window.location.href = "index.html";
+  }
+</script>
+
+</body>
+</html>

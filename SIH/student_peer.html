@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peer Support - UpliftU</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-blue: #1E6091;
+  --hover-blue: #155077;
+  --dark-navy: #0D1B2A;
+  --white: #ffffff;
+  --light-bg: linear-gradient(135deg, #E6F2FF, #B3D8FF);
+  --gray-text: #0D1B2A;
+  --soft-blue: #D9EFFF;
+  --light-gray: #abb1d1;
+}
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: var(--light-bg);
+  color: var(--gray-text);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  background: var(--white);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 25px;
+  border-bottom: 1px solid #c0d4e6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+}
+.logo img {
+  height: 50px;  
+  width: auto;
+  display: block;
+}
+
+.navbar .signout-btn {
+  background: var(--dark-navy);
+  color: var(--white);
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: 0.3s;
+}
+.navbar .signout-btn:hover {
+  background: var(--hover-blue);
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  flex: 1;
+  min-height: 90vh;
+}
+.sidebar {
+  background: var(--dark-navy);
+  color: var(--white);
+  width: 220px;
+  padding: 20px;
+  flex-shrink: 0;
+}
+.sidebar h3 {
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar ul li {
+  margin: 12px 0;
+}
+.sidebar ul li a {
+  text-decoration: none;
+  color: var(--white);
+  display: block;
+  padding: 10px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background: var(--hover-blue);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 25px;
+}
+
+/* Forum Container */
+.container {
+  max-width: 900px;
+  margin: auto;
+  background: var(--soft-blue);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
+}
+h2 {
+  text-align: center;
+  color: var(--primary-blue);
+  margin-bottom: 25px;
+}
+
+/* Ask Box */
+.ask-box {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #c0d4e6;
+  border-radius: 12px;
+  background: #ffffff;
+}
+.ask-box h3 {
+  margin-bottom: 15px;
+  color: var(--primary-blue);
+  font-size: 18px;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  font-weight: bold;
+  color: var(--primary-blue);
+  display: block;
+  margin-bottom: 6px;
+}
+.ask-box textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--primary-blue);
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+  resize: none;
+  min-height: 100px;
+}
+textarea::placeholder {
+  color: var(--light-gray);
+}
+.ask-btn, .answer-btn {
+  padding: 10px 16px;
+  background: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 8px;
+  transition: 0.3s;
+}
+.ask-btn:hover, .answer-btn:hover {
+  background: var(--hover-blue);
+}
+
+/* Questions & Answers */
+.question {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-left: 5px solid var(--primary-blue);
+  background: #ffffff;
+  border-radius: 8px;
+}
+.question h4 {
+  margin: 0;
+  color: var(--primary-blue);
+}
+.question p {
+  margin: 6px 0;
+  color: var(--gray-text);
+}
+
+.answer {
+  margin-left: 20px;
+  padding: 10px;
+  background: var(--soft-blue);
+  border-left: 3px solid var(--primary-blue);
+  border-radius: 6px;
+  margin-top: 8px;
+}
+.answer strong {
+  color: var(--primary-blue);
+}
+
+.answer-form {
+  margin-top: 10px;
+  margin-left: 20px;
+}
+.answer-form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--primary-blue);
+  min-height: 60px;
+  font-size: 14px;
+}
+
+/* Footer */
+footer {
+  background: var(--dark-navy);
+  color: var(--white);
+  padding: 40px 20px 20px;
+  margin-top: auto;
+}
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+.footer-left {
+  flex: 1 1 300px;
+}
+.footer-left h4 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: var(--primary-blue);
+}
+.footer-left p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #d1d5db;
+}
+.footer-right {
+  display: flex;
+  flex: 2;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.footer-column h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: var(--primary-blue);
+}
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+.footer-links li {
+  margin-bottom: 8px;
+}
+.footer-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
+.footer-links a:hover {
+  color: var(--light-gray);
+  text-decoration: underline;
+}
+.footer-copy {
+  text-align: center;
+  font-size: 13px;
+  color: var(--light-gray);
+  margin-top: 20px;
+  border-top: 1px solid #2d3d55;
+  padding-top: 10px;
+}
+/* Responsive Dashboard */
+@media(max-width: 900px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  /* Sidebar turns into horizontal bar */
+  .sidebar {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;  /* Make heading and menu inline */
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    flex-wrap: wrap;
+
+    position: sticky;
+    top: 60px; 
+    z-index: 999;
+    background: #051a2b;
+    gap: 15px; /* spacing between heading and menu */
+  }
+
+  /* Dashboard heading stays to the left */
+  .sidebar h3 {
+    display: block;
+    font-size: 1.2rem;
+    margin: 0;
+    color: #ffffff;
+    white-space: nowrap; /* prevent breaking */
+  }
+
+  /* Menu next to heading */
+  .sidebar ul {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sidebar ul li {
+    margin: 0;
+  }
+
+  .sidebar ul li a {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+
+  /* Footer stacked */
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-right {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+ 
+
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+ <div class="logo">
+  <img src="logo.jpg" alt="UpliftU Logo">
+</div>
+  <button class="signout-btn" onclick="logout()">Logout</button>
+</nav>
+
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h3>Dashboard</h3>
+    <ul>
+      <li><a href="student.html">🏠 Home</a></li>
+      <li><a href="student_profile.html">👤 Profile</a></li>
+      <li><a href="quiz.html">📑 Quiz</a></li>
+      <li><a href="student_booking.html">📅 Booking</a></li>
+      <li><a href="student_peer.html" class="active">🤝 Peer Support</a></li>
+      <li><a href="chatbot.html">🤖 AI Chatbot</a></li>
+      <li><a href="resources.html">📚 Resources</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <h2>Peer Support Forum</h2>
+
+      <!-- Ask Question -->
+      <div class="ask-box">
+        <h3>Post a New Question (Student)</h3>
+        <div class="form-group">
+          <label for="questionText">Your Question</label>
+          <textarea id="questionText" placeholder="Type your question here..."></textarea>
+        </div>
+        <button class="ask-btn" onclick="postQuestion()">Post Question</button>
+      </div>
+
+      <!-- Questions & Answers -->
+      <div id="questionsList"></div>
+    </div>
+  </main>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-left">
+      <h4>About UpliftU</h4>
+      <p>UpliftU is dedicated to supporting the mental health and well-being of higher education students. We provide resources, professional guidance, and a supportive community to help students thrive.</p>
+    </div>
+    <div class="footer-right">
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="student_about.html">About Us</a></li>
+          <li><a href="student_contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Policies</h4>
+        <ul class="footer-links">
+          <li><a href="student_policy.html">Privacy Policy</a></li>
+          <li><a href="student_tos.html">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Community</h4>
+        <ul class="footer-links">
+          <li><a href="student_forum.html">Forum</a></li>
+          <li><a href="student_event.html">Events</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+</footer>
+
+<script>
+const studentUsername = "student_" + Math.floor(Math.random()*10000);
+
+const questions = [
+  { user: "student_1023", text: "How can I manage stress during exams?", answers:[
+    { user: "student_2045", text: "Try making a study plan and include short breaks. Meditation also helps." },
+    { user: "student_3099", text: "I also use the Pomodoro technique, it’s very effective." }
+  ]},
+  { user: "student_8765", text: "I have trouble sleeping, any advice?", answers: [] }
+];
+
+function renderQuestions(){
+  const list = document.getElementById("questionsList");
+  list.innerHTML = "";
+
+  questions.forEach((q,index)=>{
+    const qDiv = document.createElement("div");
+    qDiv.classList.add("question");
+
+    qDiv.innerHTML = `<h4>@${q.user}</h4><p>${q.text}</p>`;
+
+    q.answers.forEach(a=>{
+      const ansDiv = document.createElement("div");
+      ansDiv.classList.add("answer");
+      ansDiv.innerHTML = `<strong>@${a.user}:</strong> ${a.text}`;
+      qDiv.appendChild(ansDiv);
+    });
+
+    if(q.user !== studentUsername){
+      const formDiv = document.createElement("div");
+      formDiv.classList.add("answer-form");
+      formDiv.innerHTML = `<textarea id="answer_${index}" placeholder="Write your answer..."></textarea>
+      <button class="answer-btn" onclick="postAnswer(${index})">Post Answer</button>`;
+      qDiv.appendChild(formDiv);
+    }
+
+    list.appendChild(qDiv);
+  });
+}
+
+function postQuestion(){
+  const questionText = document.getElementById("questionText").value.trim();
+  if(!questionText){ alert("Please enter a question."); return; }
+  questions.unshift({ user: studentUsername, text: questionText, answers: [] });
+  renderQuestions();
+  document.getElementById("questionText").value = "";
+}
+
+function postAnswer(index){
+  const textarea = document.getElementById(`answer_${index}`);
+  const text = textarea.value.trim();
+  if(!text){ alert("Please write an answer before posting."); return; }
+  questions[index].answers.push({ user: studentUsername, text });
+  renderQuestions();
+}
+
+// Initial render
+renderQuestions();
+function logout(){
+  alert("Logged out!");
+  window.location.href="index.html";
+}
+</script>
+</body>
+</html>

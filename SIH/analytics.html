@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics & Reports - UpliftU</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* --- Variables & Base Styles --- */
+:root {
+  --primary-blue: #1E6091;
+  --hover-blue: #155077;
+  --sidebar-bg: #0D1B2A;
+  --content-bg: #f9f9fb;
+  --white: #fff;
+  --text-dark: #0D1B2A;
+  --footer-bg: #0D1B2A;
+  --footer-link: #ccc;
+  --card-bg: #ffffff;
+  --border-color: #e0e0e0;
+  --light-background: #f8f9fa;
+  --gray-text: #333333;
+  --light-gray: #abb1d1;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+body, html {
+  background-color: var(--content-bg);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Top Navbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--white);
+  padding: 12px 24px;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-left img { height: 50px; }
+.topbar-left h2 { color: var(--primary-blue); margin:0; }
+
+.topbar .btn-logout {
+  padding: 8px 14px;
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.topbar .btn-logout:hover { background-color: var(--hover-blue); }
+
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  flex: 1;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: var(--sidebar-bg);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 15px;
+  flex-shrink: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar li { margin: 10px 0; }
+
+.sidebar a {
+  display: block;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: var(--white);
+  border-radius: 8px;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.sidebar a:hover, .sidebar a.active { background: var(--primary-blue); }
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* Analytics Specific Styles */
+.analytics-section {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.analytics-section h3 {
+  color: var(--primary-blue);
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.chart-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.chart-container h3 {
+  color: var(--text-dark);
+}
+
+.pie-chart-wrapper {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #ff6384 0% 30%,    /* Anxiety */
+    #ffcd56 30% 55%,  /* Depression */
+    #36a2eb 55% 80%,  /* Stress */
+    #9966ff 80% 100%  /* Sleeping Disorder */
+  );
+  margin: 20px auto;
+  position: relative;
+}
+
+.pie-chart-legend {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pie-chart-legend li {
+  display: flex;
+  align-items: center;
+  margin: 5px 15px;
+  font-size: 0.9em;
+}
+
+.legend-color {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.reports-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.reports-table th, .reports-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  background-color: var(--white);
+  white-space: nowrap;
+}
+
+.reports-table th {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  font-weight: 600;
+}
+
+.reports-table tr:nth-child(even) td {
+  background-color: var(--light-background);
+}
+
+.action-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+.action-btn.btn-view { background-color: #9b59b6; color: white; }
+
+/* Footer */
+footer {
+  background-color: var(--footer-bg);
+  color: var(--white);
+  padding: 40px 20px 20px 20px;
+  margin-top: auto;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-column { flex: 1 1 220px; }
+.footer-column h4 { color: var(--primary-blue); margin-bottom: 12px; font-size: 1.1rem; }
+.footer-links { list-style: none; padding:0; }
+.footer-links li { margin-bottom: 8px; }
+.footer-links a { color: var(--footer-link); text-decoration: none; transition:0.3s; }
+.footer-links a:hover { color: var(--white); }
+.footer-copy { text-align:center; margin-top:30px; font-size:0.85rem; color: var(--footer-link); border-top:1px solid rgba(255,255,255,0.2); padding-top:12px; }
+
+/* Responsive Adjustments */
+@media(max-width: 768px){
+  .dashboard-container { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    padding: 10px 0;
+    overflow-x: auto;
+  }
+  .sidebar ul {
+    flex-direction: row;
+    width: max-content;
+    gap: 10px;
+    justify-content: flex-start;
+  }
+  .sidebar li { margin: 0; }
+  .topbar-left h2 { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="topbar-left">
+        <img src="logo.jpg" alt="UpliftU Logo">
+        <h2>Admin Dashboard</h2>
+    </div>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+</div>
+
+<div class="dashboard-container">
+    <aside class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="admin.html">🏠 Home</a></li>
+            <li><a href="profile_a.html">👤 Profile</a></li>
+            <li><a href="userm.html">🧑‍🤝‍🧑 User Management</a></li>
+            <li><a href="peer_a.html">🤝 Peer Support Chat</a></li>
+            <li><a href="resource_a.html">📚 Resource Management</a></li>
+            <li><a href="analytics.html" class="active">📊 Analytics</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div id="analytics" class="analytics-section active">
+            <header class="dashboard-header">
+                <h2>Analytics & Reports</h2>
+            </header>
+
+            <div class="analytics-section">
+                <h3>Common Mental Health Concerns</h3>
+                <div class="chart-container">
+                    <div class="pie-chart-wrapper"></div>
+                    <ul class="pie-chart-legend">
+                        <li><span class="legend-color" style="background-color: #ff6384;"></span>30% Anxiety</li>
+                        <li><span class="legend-color" style="background-color: #ffcd56;"></span>25% Depression</li>
+                        <li><span class="legend-color" style="background-color: #36a2eb;"></span>25% Stress</li>
+                        <li><span class="legend-color" style="background-color: #9966ff;"></span>20% Sleeping Disorder</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="analytics-section">
+                <h3>Counselor Session Reports</h3>
+                <div class="table-container">
+                    <table class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>Report ID</th>
+                                <th>Counselor Name</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="session-reports-table">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="analytics-section">
+                <h3>User Engagement Metrics</h3>
+                <div class="table-container">
+                    <table class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="engagement-metrics-table">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-column">
+            <h4>About UpliftU</h4>
+            <p>Supporting student mental health and volunteer collaboration through resources and peer guidance.</p>
+        </div>
+        <div class="footer-column">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">AboutUs</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Policies</h4>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Community</h4>
+            <ul class="footer-links">
+                <li><a href="#">Forum</a></li>
+                <li><a href="#">Events</a></li>
+            </ul>
+        </div>
+    </div>
+    <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+</footer>
+
+<script>
+// Dummy data for tables
+const sessionReports = [
+    { id: 'R001', counselor: 'Dr. Smith', date: 'Sept 20, 2025' },
+    { id: 'R002', counselor: 'Dr. Miller', date: 'Sept 18, 2025' },
+];
+
+const engagementMetrics = [
+    { metric: 'Total Logins (Last 30 days)', value: '5,124' },
+    { metric: 'Most Accessed Resource', value: '"Coping with Stress" article' },
+    { metric: 'Active Users (Today)', value: '150' },
+];
+
+const sessionReportsTable = document.getElementById('session-reports-table');
+const engagementMetricsTable = document.getElementById('engagement-metrics-table');
+
+// Function to render the session reports table
+function renderSessionReports() {
+    sessionReportsTable.innerHTML = '';
+    sessionReports.forEach(report => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${report.id}</td>
+            <td>${report.counselor}</td>
+            <td>${report.date}</td>
+            <td>
+                <button class="action-btn btn-view" onclick="viewReport('${report.id}')">View Report</button>
+            </td>
+        `;
+        sessionReportsTable.appendChild(row);
+    });
+}
+
+// Function to render the engagement metrics table
+function renderEngagementMetrics() {
+    engagementMetricsTable.innerHTML = '';
+    engagementMetrics.forEach(metric => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${metric.metric}</td>
+            <td><strong>${metric.value}</strong></td>
+        `;
+        engagementMetricsTable.appendChild(row);
+    });
+}
+
+// Function to simulate viewing a report
+function viewReport(reportId) {
+    alert(`Viewing report ${reportId}. This would open a new page or modal with detailed report information.`);
+}
+
+// Logout function
+function logout() {
+  alert('Logged out!');
+  window.location.href = 'index.html';
+}
+
+// Initial render of all tables when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    renderSessionReports();
+    renderEngagementMetrics();
+});
+</script>
+
+</body>
+</html>

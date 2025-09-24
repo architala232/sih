@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Role-Based Registration</title>
+<style>
+  /* Basic Reset */
+  * {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+  body {background:#f4f7fb; display:flex; justify-content:center; align-items:flex-start; min-height:100vh; padding:20px;}
+  
+  .container {background:#fff; padding:40px; border-radius:15px; box-shadow:0 6px 18px rgba(0,0,0,0.1); width:100%; max-width:900px;}
+  h2 {text-align:center; margin-bottom:25px; color:#1e3a8a;}
+  
+  .role-select {text-align:center; margin-bottom:25px;}
+  .role-select select {padding:12px 16px; font-size:15px; border-radius:8px; border:1px solid #ccc; outline:none; transition:0.3s;}
+  .role-select select:focus {border-color:#1e3a8a; box-shadow:0 0 6px rgba(30,58,138,0.3);}
+  
+  .form-section {display:none; margin-top:20px;}
+  .form-grid {display:grid; grid-template-columns:1fr 1fr; gap:20px 40px;}
+  label {font-weight:600; color:#333; margin-bottom:6px; display:block;}
+  input, select {width:100%; padding:10px 14px; border:1px solid #ccc; border-radius:8px; font-size:14px; transition:0.3s;}
+  input:focus, select:focus {border-color:#1e3a8a; box-shadow:0 0 6px rgba(30,58,138,0.3); outline:none;}
+  
+  /* Gender */
+  .gender-options {display:flex; gap:15px; margin-top:6px;}
+  .gender-options input[type="radio"] {display:none;}
+  .gender-options label {padding:8px 16px; border:1px solid #ccc; border-radius:8px; cursor:pointer; transition:0.3s; background:#f9f9f9;}
+  .gender-options input[type="radio"]:checked + label {background:#cce5ff; color:#003366; border-color:#1e3a8a;}
+  
+  /* Days availability */
+  .days-container {display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;}
+  .day {padding:8px 14px; border:2px solid #1e3a8a; border-radius:20px; cursor:pointer; color:#1e3a8a; transition:0.3s; user-select:none;}
+  .day.selected {background:#cce5ff; color:#003366; border-color:#1e3a8a;}
+  
+  /* Submit button */
+  .submit-btn {grid-column:span 2; text-align:center; margin-top:15px;}
+  .submit-btn button {padding:14px 28px; border:none; border-radius:8px; background:#1e3a8a; color:#fff; font-size:16px; font-weight:bold; cursor:pointer; transition:0.3s;}
+  .submit-btn button:hover {background:#162f6a;}
+
+  /* Responsive */
+  @media(max-width:750px){.form-grid{grid-template-columns:1fr; gap:20px;}}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Role-Based Registration</h2>
+
+  <div class="role-select">
+    <label for="role">Select Role</label>
+    <select id="role">
+      <option value="">-- Choose Role --</option>
+      <option value="student">Student</option>
+      <option value="counsellor">Counsellor</option>
+      <option value="volunteer">Volunteer</option>
+      <option value="admin">Admin</option>
+    </select>
+  </div>
+
+  <!-- Student Form -->
+  <div id="student" class="form-section">
+    <form>
+      <div class="form-grid">
+        <div><label>Full Name</label><input type="text" id="student-fullname"></div>
+        <div><label>College/School Name</label><input type="text"></div>
+        <div><label>Program/Study</label><input type="text"></div>
+        <div><label>Year of Study</label><input type="number" min="1" max="12"></div>
+        <div><label>Date of Birth</label><input type="date"></div>
+        <div><label>Emergency Contact</label><input type="text"></div>
+        <div><label>Email</label><input type="email"></div>
+        <div><label>Username</label><input type="text" id="student-username" readonly></div>
+        <div><label>Password</label><input type="password"></div>
+        <div><label>Confirm Password</label><input type="password"></div>
+        <div>
+          <label>Gender</label>
+          <div class="gender-options">
+            <input type="radio" id="smale" name="sgender"><label for="smale">Male</label>
+            <input type="radio" id="sfemale" name="sgender"><label for="sfemale">Female</label>
+            <input type="radio" id="sother" name="sgender"><label for="sother">Other</label>
+          </div>
+        </div>
+        <div><label>Contact No.</label><input type="text"></div>
+        <div class="submit-btn"><button type="submit">Register</button></div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Counsellor Form -->
+  <div id="counsellor" class="form-section">
+    <form>
+      <div class="form-grid">
+        <div><label>Full Name</label><input type="text"></div>
+        <div><label>Email</label><input type="email"></div>
+        <div><label>Username</label><input type="text"></div>
+        <div><label>Password</label><input type="password"></div>
+        <div><label>Confirm Password</label><input type="password"></div>
+        <div><label>Specialization</label><input type="text"></div>
+        <div><label>Qualification</label><input type="text"></div>
+        <div><label>Upload Certification (PDF)</label><input type="file" accept=".pdf"></div>
+        <div>
+          <label>Availability (Days)</label>
+          <div class="days-container" id="counsellor-days">
+            <div class="day">Mon</div><div class="day">Tue</div><div class="day">Wed</div>
+            <div class="day">Thu</div><div class="day">Fri</div><div class="day">Sat</div><div class="day">Sun</div>
+          </div>
+        </div>
+        <div><label>Available Time</label><input type="time"> to <input type="time"></div>
+        <div><label>Date of Birth</label><input type="date"></div>
+        <div><label>Contact</label><input type="text"></div>
+        <div>
+          <label>Gender</label>
+          <div class="gender-options">
+            <input type="radio" id="cmale" name="cgender"><label for="cmale">Male</label>
+            <input type="radio" id="cfemale" name="cgender"><label for="cfemale">Female</label>
+            <input type="radio" id="cother" name="cgender"><label for="cother">Other</label>
+          </div>
+        </div>
+        <div class="submit-btn"><button type="submit">Register</button></div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Volunteer Form -->
+  <div id="volunteer" class="form-section">
+    <form>
+      <div class="form-grid">
+        <div><label>Full Name</label><input type="text"></div>
+        <div><label>Date of Birth</label><input type="date"></div>
+        <div><label>Email</label><input type="email"></div>
+        <div><label>Username</label><input type="text"></div>
+        <div><label>Password</label><input type="password"></div>
+        <div><label>Confirm Password</label><input type="password"></div>
+        <div><label>Contact No.</label><input type="text"></div>
+        <div><label>Qualification</label><input type="text"></div>
+        <div>
+          <label>Gender</label>
+          <div class="gender-options">
+            <input type="radio" id="vmale" name="vgender"><label for="vmale">Male</label>
+            <input type="radio" id="vfemale" name="vgender"><label for="vfemale">Female</label>
+            <input type="radio" id="vother" name="vgender"><label for="vother">Other</label>
+          </div>
+        </div>
+        <div><label>Skills / Area of Interest</label><input type="text"></div>
+        <div>
+          <label>Availability (Days)</label>
+          <div class="days-container" id="volunteer-days">
+            <div class="day">Mon</div><div class="day">Tue</div><div class="day">Wed</div>
+            <div class="day">Thu</div><div class="day">Fri</div><div class="day">Sat</div><div class="day">Sun</div>
+          </div>
+        </div>
+        <div><label>Available Time</label><input type="time"> to <input type="time"></div>
+        <div class="submit-btn"><button type="submit">Register</button></div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Admin Form -->
+  <div id="admin" class="form-section">
+    <form>
+      <div class="form-grid">
+        <div><label>Full Name</label><input type="text"></div>
+        <div><label>Employee ID</label><input type="text"></div>
+        <div><label>Email</label><input type="email"></div>
+        <div><label>Username</label><input type="text"></div>
+        <div><label>Password</label><input type="password"></div>
+        <div><label>Confirm Password</label><input type="password"></div>
+        <div><label>Qualification</label><input type="text"></div>
+        <div><label>Date of Birth</label><input type="date"></div>
+        <div>
+          <label>Gender</label>
+          <div class="gender-options">
+            <input type="radio" id="amale" name="agender"><label for="amale">Male</label>
+            <input type="radio" id="afemale" name="agender"><label for="afemale">Female</label>
+            <input type="radio" id="aother" name="agender"><label for="aother">Other</label>
+          </div>
+        </div>
+        <div><label>Contact No.</label><input type="text"></div>
+        <div class="submit-btn"><button type="submit">Register</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const roleSelect = document.getElementById('role');
+const sections = document.querySelectorAll('.form-section');
+
+// Show form based on selected role
+roleSelect.addEventListener('change', () => {
+  sections.forEach(sec => sec.style.display = 'none');
+  const selected = roleSelect.value;
+  if (selected) document.getElementById(selected).style.display = 'block';
+});
+
+// Toggle day selection
+document.querySelectorAll('.days-container').forEach(container => {
+  container.querySelectorAll('.day').forEach(day => {
+    day.addEventListener('click', () => day.classList.toggle('selected'));
+  });
+});
+
+// Auto-generate unique username for student
+const studentNameInput = document.getElementById('student-fullname');
+const studentUsernameInput = document.getElementById('student-username');
+
+studentNameInput.addEventListener('input', () => {
+  const name = studentNameInput.value.trim();
+  if (name.length > 0) {
+    const initials = name.split(' ').map(n => n.charAt(0)).join('').toLowerCase();
+    const randomStr = Math.random().toString(36).substring(2,6); // 4 char random
+    const timestamp = Date.now().toString().slice(-4); // last 4 digits
+    studentUsernameInput.value = initials + randomStr + timestamp;
+    studentUsernameInput.readOnly = true;
+  } else {
+    studentUsernameInput.value = '';
+    studentUsernameInput.readOnly = false;
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Management - UpliftU</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* --- Variables & Base Styles --- */
+:root {
+  --primary-blue: #1E6091;
+  --hover-blue: #155077;
+  --sidebar-bg: #0D1B2A;
+  --content-bg: #f9f9fb;
+  --white: #fff;
+  --text-dark: #0D1B2A;
+  --footer-bg: #0D1B2A;
+  --footer-link: #ccc;
+  --card-bg: #ffffff;
+  --border-color: #e0e0e0;
+  --light-background: #f8f9fa;
+  --gray-text: #333333;
+  --light-gray: #abb1d1;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+body, html {
+  background-color: var(--content-bg);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Top Navbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--white);
+  padding: 12px 24px;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-left img { height: 50px; }
+.topbar-left h2 { color: var(--primary-blue); margin:0; }
+
+.topbar .btn-logout {
+  padding: 8px 14px;
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.topbar .btn-logout:hover { background-color: var(--hover-blue); }
+
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  flex: 1;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: var(--sidebar-bg);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 15px;
+  flex-shrink: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar li { margin: 10px 0; }
+
+.sidebar a {
+  display: block;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: var(--white);
+  border-radius: 8px;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.sidebar a:hover, .sidebar a.active { background: var(--primary-blue); }
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* User Management Specific Styles */
+.user-management-section {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.user-management-section h3 {
+  color: var(--primary-blue);
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.user-table th, .user-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  background-color: var(--white);
+  white-space: nowrap;
+}
+
+.user-table th {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  font-weight: 600;
+}
+
+.user-table tr:nth-child(even) td {
+  background-color: var(--content-bg);
+}
+
+/* Action Buttons */
+.action-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+.action-btn:hover { opacity: 0.8; }
+.btn-approve { background-color: #2ecc71; color: white; }
+.btn-reject { background-color: #e74c3c; color: white; }
+.btn-suspend { background-color: #f39c12; color: white; }
+.btn-delete { background-color: #e74c3c; color: white; }
+
+.search-bar {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Footer */
+footer {
+  background-color: var(--footer-bg);
+  color: var(--white);
+  padding: 40px 20px 20px 20px;
+  margin-top: auto;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-column { flex: 1 1 220px; }
+.footer-column h4 { color: var(--primary-blue); margin-bottom: 12px; font-size: 1.1rem; }
+.footer-links { list-style: none; padding:0; }
+.footer-links li { margin-bottom: 8px; }
+.footer-links a { color: var(--footer-link); text-decoration: none; transition:0.3s; }
+.footer-links a:hover { color: var(--white); }
+.footer-copy { text-align:center; margin-top:30px; font-size:0.85rem; color: var(--footer-link); border-top:1px solid rgba(255,255,255,0.2); padding-top:12px; }
+
+/* Responsive Adjustments */
+@media(max-width: 768px){
+  .dashboard-container { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    padding: 10px 0;
+    overflow-x: auto;
+  }
+  .sidebar ul {
+    flex-direction: row;
+    width: max-content;
+    gap: 10px;
+    justify-content: flex-start;
+  }
+  .sidebar li { margin: 0; }
+  .topbar-left h2 { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="topbar-left">
+        <img src="logo.jpg" alt="UpliftU Logo">
+        <h2>Admin Dashboard</h2>
+    </div>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+</div>
+
+<div class="dashboard-container">
+    <aside class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="admin.html">🏠 Home</a></li>
+            <li><a href="profile_a.html">👤 Profile</a></li>
+            <li><a href="userm.html" class="active">🧑‍🤝‍🧑 User Management</a></li>
+            <li><a href="peer_a.html">🤝 Peer Support </a></li>
+            <li><a href="resource_a.html">📚 Resource Management</a></li>
+            <li><a href="analytics.html">📊 Analytics</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div id="user-management" class="user-management-section active">
+            <header class="dashboard-header">
+                <h2>User Management</h2>
+            </header>
+
+            <div class="user-management-section">
+                <h3>Pending Registrations</h3>
+                <div class="table-container">
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pending-users-table">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="user-management-section">
+                <h3>All Users</h3>
+                <input type="text" id="user-search-bar" class="search-bar" placeholder="Search users by name or ID...">
+                <div class="table-container">
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-users-table">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-column">
+            <h4>About UpliftU</h4>
+            <p>Supporting student mental health and volunteer collaboration through resources and peer guidance.</p>
+        </div>
+        <div class="footer-column">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">AboutUs</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Policies</h4>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Community</h4>
+            <ul class="footer-links">
+                <li><a href="#">Forum</a></li>
+                <li><a href="#">Events</a></li>
+            </ul>
+        </div>
+    </div>
+    <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+</footer>
+
+<script>
+// Dummy data for users
+const usersData = [
+    { id: 'UID101', name: 'Alex Johnson', role: 'Counselor', status: 'Pending' },
+    { id: 'UID102', name: 'Sarah Lee', role: 'Counselor', status: 'Pending' },
+    { id: 'SID123', name: 'Jane Doe', role: 'Student', status: 'Active' },
+    { id: 'CID456', name: 'Dr. Smith', role: 'Counselor', status: 'Active' },
+    { id: 'VID789', name: 'Volunteer Anna', role: 'Volunteer', status: 'Active' },
+    { id: 'SID124', name: 'Bob Williams', role: 'Student', status: 'Suspended' },
+];
+
+const pendingUsersTable = document.getElementById('pending-users-table');
+const allUsersTable = document.getElementById('all-users-table');
+const userSearchBar = document.getElementById('user-search-bar');
+
+function renderUserTables(filter = '') {
+    pendingUsersTable.innerHTML = '';
+    allUsersTable.innerHTML = '';
+    
+    const filteredUsers = usersData.filter(user => 
+        user.name.toLowerCase().includes(filter.toLowerCase()) || 
+        user.id.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    filteredUsers.forEach(user => {
+        if (user.status === 'Pending') {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.role}</td>
+                <td>
+                    <button class="action-btn btn-approve" onclick="approveUser('${user.id}')">Approve</button>
+                    <button class="action-btn btn-reject" onclick="rejectUser('${user.id}')">Reject</button>
+                </td>
+            `;
+            pendingUsersTable.appendChild(row);
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.role}</td>
+                <td>${user.status}</td>
+                <td>
+                    <button class="action-btn btn-suspend" onclick="suspendUser('${user.id}')">Suspend</button>
+                    <button class="action-btn btn-delete" onclick="deleteUser('${user.id}')">Delete</button>
+                </td>
+            `;
+            allUsersTable.appendChild(row);
+        }
+    });
+}
+
+function approveUser(id) {
+    if (confirm(`Are you sure you want to approve user ${id}?`)) {
+        const user = usersData.find(u => u.id === id);
+        if (user) {
+            user.status = 'Active';
+            renderUserTables();
+            alert(`User ${id} has been approved.`);
+        }
+    }
+}
+
+function rejectUser(id) {
+    if (confirm(`Are you sure you want to reject user ${id}? This will permanently delete their registration.`)) {
+        const index = usersData.findIndex(u => u.id === id);
+        if (index > -1) {
+            usersData.splice(index, 1);
+            renderUserTables();
+            alert(`User ${id}'s registration has been rejected and deleted.`);
+        }
+    }
+}
+
+function suspendUser(id) {
+    if (confirm(`Are you sure you want to suspend user ${id}? This will restrict their access.`)) {
+        const user = usersData.find(u => u.id === id);
+        if (user) {
+            user.status = 'Suspended';
+            renderUserTables();
+            alert(`User ${id} has been suspended.`);
+        }
+    }
+}
+
+function deleteUser(id) {
+    if (confirm(`Are you sure you want to permanently delete user ${id}?`)) {
+        const index = usersData.findIndex(u => u.id === id);
+        if (index > -1) {
+            usersData.splice(index, 1);
+            renderUserTables();
+            alert(`User ${id} has been permanently deleted.`);
+        }
+    }
+}
+
+userSearchBar.addEventListener('input', (e) => {
+    renderUserTables(e.target.value);
+});
+
+function logout() {
+  alert('Logged out!');
+  window.location.href = 'index.html';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderUserTables();
+});
+</script>
+
+</body>
+</html>

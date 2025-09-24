@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volunteer Profile - UpliftU</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #1E6091;
+  --sidebar-bg: #0D1B2A;
+  --content-bg: #f9f9fb;
+  --text-dark: #0D1B2A;
+  --white: #fff;
+  --hover-blue: #155077;
+  --soft-blue: #D9EFFF;
+  --light-gray: #ccc;
+}
+
+/* Reset & body */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Montserrat',sans-serif; }
+body { display:flex; flex-direction:column; min-height:100vh; background:var(--content-bg); color:var(--text-dark); }
+
+/* TOPBAR */
+.topbar { background:var(--white); display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-bottom:1px solid #e5e7eb; position:sticky; top:0; z-index:1000; }
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.topbar-left h1 { font-size:20px; color:var(--primary); }
+.logo { width:60px; height:auto; }
+.btn { padding:8px 14px; border-radius:8px; background:var(--primary); color:#fff; border:none; cursor:pointer; font-weight:600; transition:0.3s; }
+.btn:hover { background:var(--hover-blue); }
+
+/* Layout */
+.dashboard-container { display:flex; flex:1; min-height:calc(100vh - 56px); }
+
+/* Sidebar */
+.sidebar { width:220px; background:var(--sidebar-bg); color:var(--white); display:flex; flex-direction:column; padding:20px 15px; }
+.nav { list-style:none; flex:1; display:flex; flex-direction:column; padding-left:10px; }
+.nav li { margin:10px 0; }
+.nav a { display:block; padding:10px 14px; text-decoration:none; color:var(--white); border-radius:8px; transition:0.3s; }
+.nav a:hover, .nav a.active { background:var(--primary); }
+
+/* Main content */
+.main-content { flex:1; padding:24px; overflow-y:auto; }
+.container { max-width:700px; margin:auto; background:var(--white); padding:30px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.08); }
+h2 { text-align:center; margin-bottom:15px; color:var(--primary); }
+h4 { text-align:center; margin-bottom:20px; color:#555; font-weight:500; }
+
+/* Photo upload */
+.photo-upload { text-align:center; margin-bottom:20px; }
+.photo-circle { width:140px; height:140px; border-radius:50%; border:3px dashed var(--light-gray); margin:0 auto; position:relative; overflow:hidden; background:#f0f4f9; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:0.3s; }
+.photo-circle:hover { border-color:var(--primary); background:#eaf4fb; }
+.photo-circle img { width:100%; height:100%; object-fit:cover; display:none; }
+.photo-circle input { display:none; }
+.upload-label { position:absolute; text-align:center; font-size:14px; font-weight:600; color:var(--text-dark); pointer-events:none; }
+
+/* Info Grid */
+.info-grid { display:flex; flex-direction:column; gap:15px; }
+.info-item { display:flex; flex-direction:column; }
+.info-item label { font-weight:600; margin-bottom:4px; font-size:14px; }
+.info-item input { padding:10px; border:1px solid var(--light-gray); border-radius:8px; font-size:14px; }
+.info-item input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 5px rgba(30,96,145,0.3); }
+.info-item-wrapper { position:relative; }
+.inline-btn { position:absolute; right:14px; top:30px; padding:6px 12px; border:none; border-radius:6px; background:var(--primary); color:#fff; font-size:13px; cursor:pointer; transition:0.3s; }
+.inline-btn:hover { background:var(--hover-blue); }
+
+/* Availability */
+.availability-section { margin-top:20px; }
+.days-buttons { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.days-buttons button { padding:8px 14px; border:1px solid var(--light-gray); border-radius:6px; background:var(--white); cursor:pointer; transition:0.3s; }
+.days-buttons button.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+.days-buttons button:hover { background:var(--soft-blue); }
+.time-inputs { display:flex; gap:12px; margin-top:10px; }
+.time-inputs input { flex:1; padding:10px; border:1px solid var(--light-gray); border-radius:8px; }
+.btn-update { margin-top:25px; padding:12px 25px; background:var(--primary); color:#fff; border:none; border-radius:10px; cursor:pointer; font-weight:600; display:block; margin-left:auto; margin-right:auto; transition:0.3s; }
+.btn-update:hover { background:var(--hover-blue); }
+
+/* Footer (like your Resource page) */
+footer { background:var(--sidebar-bg); color:var(--white); padding:40px 20px; margin-top:auto; }
+.footer-container { display:flex; flex-wrap:wrap; justify-content:space-between; gap:30px; max-width:1200px; margin:auto; align-items:flex-start; }
+.footer-column { flex:1 1 220px; }
+.footer-column h4 { color:var(--primary); margin-bottom:12px; font-size:1.1rem; }
+.footer-links { list-style:none; padding:0; }
+.footer-links li { margin-bottom:8px; }
+.footer-links a { color:#ccc; text-decoration:none; transition:0.3s; font-size:0.95rem; }
+.footer-links a:hover { color:#fff; }
+.footer-column p { font-size:0.95rem; line-height:1.5; color:#ccc; }
+.footer-copy { text-align:center; margin-top:30px; font-size:0.85rem; color:#ccc; border-top:1px solid rgba(255,255,255,0.2); padding-top:12px; }
+
+/* Responsive */
+@media(max-width:768px){
+  .dashboard-container { flex-direction:column; }
+  .sidebar { width:100%; flex-direction:row; justify-content:space-around; padding:10px 0; }
+  .nav { flex-direction:row; gap:10px; padding-left:0; }
+  .nav li { margin:0; }
+  .main-content { padding:16px; }
+  .time-inputs { flex-direction:column; }
+  .inline-btn { top:25px; }
+  .footer-container { flex-direction:column; align-items:flex-start ; gap:20px; }
+  .footer-column { flex:1 1 100%; }
+  .footer-copy { margin-top:20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <img src="logo.jpg" alt="UpliftU Logo" class="logo">
+    <h1>Volunteer Dashboard</h1>
+  </div>
+  <button class="btn" onclick="logout()">Logout</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <ul class="nav">
+      <li><a href="volunteer.html">🏠 Home</a></li>
+      <li><a href="profile_v.html" class="active">👤 Profile</a></li>
+      <li><a href="peer_v.html">🤝 Peer Support</a></li>
+      <li><a href="resource_v.html">📚 Resources</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <h2>Volunteer Profile</h2>
+      <h4>Active Volunteer</h4>
+
+      <!-- Photo Upload -->
+      <div class="photo-upload">
+        <label class="photo-circle">
+          <input type="file" accept="image/*" onchange="previewPhoto(event)">
+          <img id="photoPreview" src="" alt="Profile Photo">
+          <span class="upload-label">Upload<br>Photo</span>
+        </label>
+      </div>
+
+      <!-- Info Grid -->
+      <div class="info-grid">
+        <div class="info-item"><label>Full Name</label><input type="text" value="Yasvi Davra" readonly></div>
+        <div class="info-item"><label>Username</label><input type="text" value="yasvi_davra" readonly></div>
+        <div class="info-item-wrapper">
+          <div class="info-item"><label>Contact</label><input type="text" id="contact-input" value="+91 98765 43210" readonly></div>
+          <button class="inline-btn" onclick="toggleEdit('contact')">Change</button>
+        </div>
+        <div class="info-item-wrapper">
+          <div class="info-item"><label>Email</label><input type="text" id="email-input" value="yasvi@example.com" readonly></div>
+          <button class="inline-btn" onclick="toggleEdit('email')">Change</button>
+        </div>
+        <div class="info-item"><label>Area of Interest / Skill</label><input type="text" value="Counseling, Event Management" readonly></div>
+        <div class="info-item-wrapper">
+          <div class="info-item"><label>Qualification</label><input type="text" id="qualification-input" value="B.Tech Computer Engineering" readonly></div>
+          <button class="inline-btn" onclick="toggleEdit('qualification')">Change</button>
+        </div>
+
+        <!-- Availability -->
+        <div class="availability-section">
+          <label>Availability (Days)</label>
+          <div class="days-buttons">
+            <button type="button" onclick="toggleDay(this)">Mon</button>
+            <button type="button" onclick="toggleDay(this)">Tue</button>
+            <button type="button" onclick="toggleDay(this)">Wed</button>
+            <button type="button" onclick="toggleDay(this)">Thu</button>
+            <button type="button" onclick="toggleDay(this)">Fri</button>
+            <button type="button" onclick="toggleDay(this)">Sat</button>
+            <button type="button" onclick="toggleDay(this)">Sun</button>
+          </div>
+          <label>Availability (Time)</label>
+          <div class="time-inputs">
+            <input type="time" id="start-time" value="10:00">
+            <input type="time" id="end-time" value="16:00">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-update" onclick="saveProfile()">Update Profile</button>
+    </div>
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-column">
+      <h4>About UpliftU</h4>
+      <p>Supporting student mental health and volunteer collaboration through resources and peer guidance.</p>
+    </div>
+    <div class="footer-column">
+      <h4>Quick Links</h4>
+      <ul class="footer-links">
+        <li><a href="about_v.html">About Us</a></li>
+        <li><a href="contact_v.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h4>Policies</h4>
+      <ul class="footer-links">
+        <li><a href="privacy_v.html">Privacy Policy</a></li>
+        <li><a href="tos_v.html">Terms of Service</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h4>Community</h4>
+      <ul class="footer-links">
+        <li><a href="forum_v.html">Forum</a></li>
+        <li><a href="event_v.html">Events</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; 2025 UpliftU. All Rights Reserved.</p>
+</footer>
+
+<script>
+function previewPhoto(event) {
+  const preview = document.getElementById('photoPreview');
+  preview.src = URL.createObjectURL(event.target.files[0]);
+  preview.style.display = 'block';
+  document.querySelector('.upload-label').style.display = 'none';
+}
+function toggleEdit(field) {
+  const input = document.getElementById(field + '-input');
+  const btn = event.target;
+  if (input.hasAttribute('readonly')) { input.removeAttribute('readonly'); input.focus(); btn.innerText = "Save"; }
+  else { input.setAttribute('readonly', true); btn.innerText = "Change"; alert(field.charAt(0).toUpperCase()+field.slice(1)+' updated!'); }
+}
+function toggleDay(btn){ btn.classList.toggle("active"); }
+function saveProfile(){ alert('Volunteer profile updated successfully!'); }
+function logout(){ alert('You have been logged out!'); window.location.href='index.html'; }
+</script>
+
+</body>
+</html>
